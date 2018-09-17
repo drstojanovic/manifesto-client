@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    app:cardUseCompatPadding="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/profile_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="@id/constraint_layout"
+            app:layout_constraintTop_toTopOf="@id/constraint_layout"
+            android:src="@drawable/no_image_available" />
+
+        <TextView
+            android:id="@+id/text_name"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/text_time"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toEndOf="@+id/image_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Pera Peric" />
+
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/constraint_layout"
+            tools:text="2h ago" />
+
+        <TextView
+            android:id="@+id/text_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintEnd_toEndOf="@id/constraint_layout"
+            app:layout_constraintStart_toStartOf="@id/constraint_layout"
+            app:layout_constraintTop_toBottomOf="@+id/image_profile"
+            tools:text="This is description.This is description.This is description.This is description.This is description.This is description.This is description." />
+
+        <ImageView
+            android:id="@+id/image_post"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/nav_header_height"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/post_image"
+            android:src="@drawable/no_image_available"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_description" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
