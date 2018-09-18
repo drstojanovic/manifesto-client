@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Evy</string>
-    <string name="app_name_big">EVY</string>
+    <string name="app_name">Manifesto</string>
     <string name="app_slogan">Make events better</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="email">Email</string>
