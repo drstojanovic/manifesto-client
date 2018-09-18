@@ -12,4 +12,7 @@ public interface LoginDao {
     @POST("user/signup")
     Single<ResponseMessage<User>> registerUser (@Body User user);
 
+    @POST("user/login")
+    Single<ResponseMessage<User>> loginUser(@Body User user);
+
 }

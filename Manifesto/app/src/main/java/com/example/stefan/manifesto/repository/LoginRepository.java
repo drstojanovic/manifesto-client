@@ -18,5 +18,12 @@ public class LoginRepository {
                .subscribe(singleObserver);
     }
 
+    public void loginUser(User user, SingleObserver<ResponseMessage<User>> singleObserver) {
+        ApiManager.getLoginDao().loginUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(singleObserver);
+    }
+
 
 }

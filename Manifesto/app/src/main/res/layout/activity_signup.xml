@@ -13,7 +13,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login_background">
+        android:background="@drawable/login_background"
+        android:paddingEnd="@dimen/side_padding"
+        android:paddingStart="@dimen/side_padding">
 
         <TextView
             android:id="@+id/app_name"
@@ -23,8 +25,8 @@
             android:text="@string/app_name"
             android:textColor="@color/colorPrimary"
             android:textSize="70sp"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.design.widget.TextInputLayout
@@ -34,17 +36,17 @@
             android:hint="@string/name"
             app:errorEnabled="true"
             app:hintTextAppearance="@style/EditTextHintStyle"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/app_name">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/edit_name"
                 style="@style/EditTextStyle"
-                android:text="@={viewModel.user.name}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="@={viewModel.name}" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -55,17 +57,17 @@
             android:hint="@string/email"
             app:errorEnabled="true"
             app:hintTextAppearance="@style/EditTextHintStyle"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_name_container">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/edit_email"
                 style="@style/EditTextStyle"
-                android:text="@={viewModel.user.email}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textWebEmailAddress" />
+                android:inputType="textWebEmailAddress"
+                android:text="@={viewModel.email}" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -76,18 +78,18 @@
             android:hint="@string/password"
             app:errorEnabled="true"
             app:hintTextAppearance="@style/EditTextHintStyle"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_email_container"
             app:passwordToggleEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/edit_password"
                 style="@style/EditTextStyle"
-                android:text="@={viewModel.user.password}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textWebPassword" />
+                android:inputType="textWebPassword"
+                android:text="@={viewModel.password}" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -98,17 +100,17 @@
             android:hint="@string/city"
             app:errorEnabled="true"
             app:hintTextAppearance="@style/EditTextHintStyle"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_password_container">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/edit_city"
                 style="@style/EditTextStyle"
-                android:text="@={viewModel.user.city}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textWebEmailAddress" />
+                android:inputType="textWebEmailAddress"
+                android:text="@={viewModel.city}" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -117,28 +119,13 @@
             style="@style/ButtonTertiaryColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.onSignUpButtonClick()}"
             android:paddingEnd="40dp"
             android:paddingStart="40dp"
             android:text="@string/sign_up"
-            android:onClick="@{()-> viewModel.onSignUpButtonClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/side_padding" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/side_padding" />
 
     </android.support.constraint.ConstraintLayout>
 

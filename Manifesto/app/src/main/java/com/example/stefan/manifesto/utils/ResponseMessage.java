@@ -42,4 +42,12 @@ public class ResponseMessage<T> {
         this.responseBody = responseBody;
     }
 
+    public static <T> ResponseMessage<T> error() {
+        return new ResponseMessage<>(false, "Some error happend");
+    }
+
+    public static <T> ResponseMessage<T> success() {
+        return new ResponseMessage<>(true, "Operation successfull");
+    }
+
 }
