@@ -9,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-//    private static final String BASE_URL = "https://localhost:8080/";
     private static final String BASE_URL = "http://10.14.116.218:8080/";
     private static LoginDao loginDao;
     private static OkHttpClient client;

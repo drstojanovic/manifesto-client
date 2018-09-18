@@ -20,7 +20,7 @@ public class LoginViewModel extends BaseViewModel {
     private LoginRepository repository = new LoginRepository();
 
     public LoginViewModel() {
-
+        user.set(new User());
     }
 
     public ObservableField<User> getUser() {
@@ -57,5 +57,18 @@ public class LoginViewModel extends BaseViewModel {
 
     public void onSignUpButtonClick() {
         signUpButtonClick.setValue(true);
+    }
+
+    public String getEmail() {
+        return  user.get().getEmail();
+    }
+    public void setEmail(String email) {
+        user.get().setEmail(email);
+    }
+    public String getPassword() {
+        return  user.get().getPassword();
+    }
+    public void setPassword(String password) {
+        user.get().setPassword(password);
     }
 }

@@ -12,6 +12,7 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivityLoginBinding;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.utils.ResponseMessage;
+import com.example.stefan.manifesto.utils.UserSession;
 import com.example.stefan.manifesto.viewmodel.LoginViewModel;
 
 
@@ -34,7 +35,13 @@ public class LoginActivity extends BaseActivity {
         viewModel.getResponse().observe(this, new Observer<ResponseMessage<User>>() {
             @Override
             public void onChanged(@Nullable ResponseMessage<User> userResponseMessage) {
-                if (userResponseMessage != null) {
+                if (userResponseMessage == null)
+                    return;
+
+                if (userResponseMessage.isSuccess()) {
+                    UserSession.setUser(userResponseMessage.getResponseBody());
+                    navigateToActivity(MainActivity.class);
+                } else {
                     makeToast(userResponseMessage.getMessage());
                 }
             }
