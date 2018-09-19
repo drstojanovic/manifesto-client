@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.example.stefan.manifesto.R;
+import com.example.stefan.manifesto.ui.fragment.EventListFragment;
 import com.example.stefan.manifesto.ui.fragment.FeedFragment;
+import com.example.stefan.manifesto.utils.SharedPreferencesUtil;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FeedFragment.newInstance(), FeedFragment.class.getSimpleName()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, EventListFragment.newInstance(), EventListFragment.class.getSimpleName()).commit();
 
     }
 

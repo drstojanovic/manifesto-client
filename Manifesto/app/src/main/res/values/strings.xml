@@ -17,4 +17,5 @@
     <string name="feed">Feed</string>
     <string name="profile_image">Profile image</string>
     <string name="post_image">Post image</string>
+    <string name="event_image">Event image</string>
 </resources>
