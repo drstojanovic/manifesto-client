@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Manifesto</string>
     <string name="app_slogan">Make events better</string>
+    <string name="error">Some error occurred.</string>
+
     <string name="forgot_password">Forgot password?</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -18,4 +20,5 @@
     <string name="profile_image">Profile image</string>
     <string name="post_image">Post image</string>
     <string name="event_image">Event image</string>
+    <string name="following">Following</string>
 </resources>
