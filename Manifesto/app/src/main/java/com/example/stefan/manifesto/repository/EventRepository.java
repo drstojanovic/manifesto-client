@@ -9,10 +9,17 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class EventListRepository extends BaseRepository {
+public class EventRepository extends BaseRepository {
 
     public void getAllEvents(SingleObserver<List<Event>> observer) {
         ApiManager.getEventDao().getAllEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getEventById(int id, SingleObserver<Event> observer) {
+        ApiManager.getEventDao().getEventById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

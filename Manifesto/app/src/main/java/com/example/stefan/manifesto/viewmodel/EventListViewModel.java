@@ -4,8 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import com.example.stefan.manifesto.model.Event;
-import com.example.stefan.manifesto.model.User;
-import com.example.stefan.manifesto.repository.EventListRepository;
+import com.example.stefan.manifesto.repository.EventRepository;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import io.reactivex.disposables.Disposable;
 
 public class EventListViewModel extends BaseViewModel {
 
-    private EventListRepository repository = new EventListRepository();
+    private EventRepository repository = new EventRepository();
     private MutableLiveData<List<Event>> events = new MutableLiveData<>();
 
     public EventListViewModel() {
@@ -43,4 +42,5 @@ public class EventListViewModel extends BaseViewModel {
             }
         });
     }
+
 }

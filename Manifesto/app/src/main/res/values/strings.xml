@@ -21,4 +21,7 @@
     <string name="post_image">Post image</string>
     <string name="event_image">Event image</string>
     <string name="following">Following</string>
+    <string name="follow">Follow</string>
+    <string name="description">Description</string>
+    <string name="time_of_event">Time of event</string>
 </resources>

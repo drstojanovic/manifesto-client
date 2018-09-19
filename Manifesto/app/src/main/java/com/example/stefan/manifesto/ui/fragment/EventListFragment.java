@@ -3,6 +3,7 @@ package com.example.stefan.manifesto.ui.fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class EventListFragment extends BaseFragment implements EventAdapter.OnEventItemClickListener {
 
+    public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     private FragmentEventListBinding binding;
     private EventListViewModel viewModel;
     private EventAdapter adapter;
@@ -79,7 +81,9 @@ public class EventListFragment extends BaseFragment implements EventAdapter.OnEv
 
     @Override
     public void onEventItemClick(Integer eventId) {
-        navigateToActivity(ShowEventActivity.class);
+        Intent intent = new Intent(getContext(), ShowEventActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, eventId);
+        startActivity(intent);
     }
 
 }

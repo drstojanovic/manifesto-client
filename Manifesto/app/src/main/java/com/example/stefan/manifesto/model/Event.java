@@ -12,6 +12,7 @@ public class Event {
     private Double latitude;
     private Double longitude;
     private String image;
+    private String description;
 
 
     public Integer getId() {
@@ -76,5 +77,13 @@ public class Event {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
