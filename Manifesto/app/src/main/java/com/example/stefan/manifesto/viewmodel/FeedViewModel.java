@@ -2,6 +2,7 @@ package com.example.stefan.manifesto.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
 
 import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+
+import static android.content.ContentValues.TAG;
 
 public class FeedViewModel extends BaseViewModel {
 
@@ -36,7 +39,7 @@ public class FeedViewModel extends BaseViewModel {
 
             @Override
             public void onError(Throwable e) {
-
+                Log.e(TAG, "onError: " + e.getMessage() );
             }
         });
     }

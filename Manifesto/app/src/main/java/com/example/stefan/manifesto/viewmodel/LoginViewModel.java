@@ -49,6 +49,7 @@ public class LoginViewModel extends BaseViewModel {
                     @Override
                     public void onSuccess(ResponseMessage<User> userResponseMessage) {
                         response.setValue(userResponseMessage);
+                        getFollowedEvents(userResponseMessage.getResponseBody().getId());
                     }
 
                     @Override
@@ -56,8 +57,10 @@ public class LoginViewModel extends BaseViewModel {
                         response.setValue(ResponseMessage.<User>error());
                     }
                 });
+    }
 
-        repository.getFollowedEvents(user.get().getId(),
+    private void getFollowedEvents(int id) {
+        repository.getFollowedEvents(id,
                 new SingleObserver<List<Integer>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -81,7 +84,7 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public String getEmail() {
-        return  user.get().getEmail();
+        return user.get() != null ? user.get().getEmail() : "";
     }
     public void setEmail(String email) {
         user.get().setEmail(email);

@@ -10,7 +10,7 @@ import retrofit2.http.POST;
 
 public interface FeedDao {
 
-    @POST("post/events")
+    @POST("post/forEvents")
     Single<List<Post>> getAllPostsForCurrentUserEvents(@Body List<Integer> eventIds);
 
 }

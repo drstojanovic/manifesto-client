@@ -4,6 +4,7 @@ import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.utils.UserSession;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
@@ -14,7 +15,8 @@ public class FeedRepository extends BaseRepository {
 
 
     public void getAllPostsForCurrentUserEvents(SingleObserver<List<Post>> observer) {
-        ApiManager.getFeedDao().getAllPostsForCurrentUserEvents(UserSession.getFollowedEvents())
+        ArrayList<Integer> arrayList = new ArrayList<>();arrayList.add(1);
+        ApiManager.getFeedDao().getAllPostsForCurrentUserEvents(arrayList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

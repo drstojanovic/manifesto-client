@@ -39,6 +39,10 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
         binding.setViewModel(viewModel);
 
+        if (adapter != null) {
+            binding.recyclerFeed.setAdapter(adapter);
+        }
+
         initViews();
         setUpObservers();
         return binding.getRoot();
@@ -48,6 +52,9 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
             public void onChanged(@Nullable List<Post> list) {
+                if (list == null) {
+                    makeToast(R.string.error);
+                }
                 setAdapter(list);
             }
         });
