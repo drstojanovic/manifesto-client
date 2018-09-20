@@ -29,7 +29,6 @@ public class ShowEventActivity extends BaseActivity {
 
             setUpObservers();
         }
-
     }
 
     private void setUpObservers() {

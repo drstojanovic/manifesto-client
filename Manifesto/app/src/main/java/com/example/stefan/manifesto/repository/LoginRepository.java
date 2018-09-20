@@ -4,6 +4,8 @@ import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 
+import java.util.List;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -25,5 +27,11 @@ public class LoginRepository {
                 .subscribe(singleObserver);
     }
 
+    public void getFollowedEvents(int userId, SingleObserver<List<Integer>> singleObserver) {
+        ApiManager.getLoginDao().getFollowedEventsId(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(singleObserver);
+    }
 
 }

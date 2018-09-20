@@ -12,6 +12,7 @@ public class ApiManager {
     private static final String BASE_URL = "http://10.14.116.218:8080/";
     private static LoginDao loginDao;
     private static EventDao eventDao;
+    private static FeedDao feedDao;
     private static OkHttpClient client;
 
     private static Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -43,4 +44,10 @@ public class ApiManager {
         return eventDao;
     }
 
+    public static FeedDao getFeedDao() {
+        if (feedDao == null) {
+            feedDao = retrofit.create(FeedDao.class);
+        }
+        return feedDao;
+    }
 }

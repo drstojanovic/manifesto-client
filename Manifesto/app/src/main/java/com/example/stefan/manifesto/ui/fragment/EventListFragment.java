@@ -30,10 +30,7 @@ public class EventListFragment extends BaseFragment implements EventAdapter.OnEv
     private EventAdapter adapter;
 
     public static EventListFragment newInstance() {
-        Bundle args = new Bundle();
-        EventListFragment fragment = new EventListFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new EventListFragment();
     }
 
     @Nullable

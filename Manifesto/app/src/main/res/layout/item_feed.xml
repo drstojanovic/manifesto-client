@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.stefan.manifesto.viewmodel.FeedItemViewModel"/>
+
+        <import type="com.example.stefan.manifesto.utils.DateUtils"/>
+
+    </data>
+
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,6 +31,8 @@
             android:layout_height="50dp"
             android:contentDescription="@string/profile_image"
             android:scaleType="centerCrop"
+            imageUrl="@{viewModel.post.user.image}"
+            errorImageResId="@{@drawable/no_image_available}"
             app:layout_constraintStart_toStartOf="@id/constraint_layout"
             app:layout_constraintTop_toTopOf="@id/constraint_layout"
             android:src="@drawable/no_image_available" />
@@ -31,6 +45,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="@{viewModel.post.user.name}"
             app:layout_constraintEnd_toStartOf="@+id/text_time"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toEndOf="@+id/image_profile"
@@ -41,6 +56,7 @@
             android:id="@+id/text_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{DateUtils.getHourMinutFormat(viewModel.post.time)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/constraint_layout"
             tools:text="2h ago" />
@@ -52,6 +68,7 @@
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:maxLines="3"
+            android:text="@{viewModel.post.text}"
             app:layout_constraintEnd_toEndOf="@id/constraint_layout"
             app:layout_constraintStart_toStartOf="@id/constraint_layout"
             app:layout_constraintTop_toBottomOf="@+id/image_profile"
@@ -65,6 +82,8 @@
             android:contentDescription="@string/post_image"
             android:src="@drawable/no_image_available"
             android:scaleType="centerCrop"
+            imageUrl="@{viewModel.post.image}"
+            errorImageResId="@{@drawable/no_image_available}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_description" />
@@ -72,3 +91,5 @@
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
+
+</layout>

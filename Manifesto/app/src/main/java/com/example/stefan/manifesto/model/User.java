@@ -7,6 +7,7 @@ public class User {
     private String email;
     private String password;
     private String city;
+    private String image;
 
 
     public int getId() {
@@ -38,6 +39,14 @@ public class User {
     }
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 

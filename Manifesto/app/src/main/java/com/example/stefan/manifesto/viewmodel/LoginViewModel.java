@@ -8,6 +8,9 @@ import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.LoginRepository;
 import com.example.stefan.manifesto.utils.ButtonClickLiveData;
 import com.example.stefan.manifesto.utils.ResponseMessage;
+import com.example.stefan.manifesto.utils.UserSession;
+
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -51,6 +54,24 @@ public class LoginViewModel extends BaseViewModel {
                     @Override
                     public void onError(Throwable e) {
                         response.setValue(ResponseMessage.<User>error());
+                    }
+                });
+
+        repository.getFollowedEvents(user.get().getId(),
+                new SingleObserver<List<Integer>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<Integer> integers) {
+                        UserSession.setFollowedEvents(integers);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
                     }
                 });
     }

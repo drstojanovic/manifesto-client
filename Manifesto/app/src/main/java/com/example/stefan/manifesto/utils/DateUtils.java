@@ -6,12 +6,17 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    //todo: what if date is null?
     public static String getDayMonthFormat(Date date) {
         if (date == null) return "/";
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM", Locale.US);
         return simpleDateFormat.format(date);
     }
 
+    public static String getHourMinutFormat(Date date) {
+        if (date == null) return "/";
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        return simpleDateFormat.format(date);
+    }
 }
