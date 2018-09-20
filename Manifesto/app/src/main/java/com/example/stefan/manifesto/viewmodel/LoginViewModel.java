@@ -49,7 +49,9 @@ public class LoginViewModel extends BaseViewModel {
                     @Override
                     public void onSuccess(ResponseMessage<User> userResponseMessage) {
                         response.setValue(userResponseMessage);
-                        getFollowedEvents(userResponseMessage.getResponseBody().getId());
+                        if (userResponseMessage != null && userResponseMessage.getResponseBody() != null) {
+                            getFollowedEvents(userResponseMessage.getResponseBody().getId());
+                        }
                     }
 
                     @Override
@@ -69,7 +71,9 @@ public class LoginViewModel extends BaseViewModel {
 
                     @Override
                     public void onSuccess(List<Integer> integers) {
-                        UserSession.setFollowedEvents(integers);
+                        if (integers != null && integers.size() > 0) {
+                            UserSession.setFollowedEvents(integers);
+                        }
                     }
 
                     @Override
@@ -86,12 +90,15 @@ public class LoginViewModel extends BaseViewModel {
     public String getEmail() {
         return user.get() != null ? user.get().getEmail() : "";
     }
+
     public void setEmail(String email) {
         user.get().setEmail(email);
     }
+
     public String getPassword() {
-        return  user.get().getPassword();
+        return user.get().getPassword();
     }
+
     public void setPassword(String password) {
         user.get().setPassword(password);
     }

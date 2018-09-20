@@ -35,9 +35,11 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feed, container, false);
-        viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-        binding.setViewModel(viewModel);
+        if (binding == null) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feed, container, false);
+            viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+            binding.setViewModel(viewModel);
+        }
 
         if (adapter != null) {
             binding.recyclerFeed.setAdapter(adapter);

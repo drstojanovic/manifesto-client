@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (isNavItemChecked(item)) return false;
 
+        item.setChecked(true);
+
         switch (item.getItemId()) {
             case R.id.menu_item_events:
                 putFragment(EventListFragment.newInstance(), true, EventListFragment.class.getSimpleName());

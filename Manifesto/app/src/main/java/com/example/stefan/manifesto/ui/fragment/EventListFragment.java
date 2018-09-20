@@ -36,10 +36,11 @@ public class EventListFragment extends BaseFragment implements EventAdapter.OnEv
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_list, container, false);
-        viewModel = ViewModelProviders.of(this).get(EventListViewModel.class);
-        binding.setViewModel(viewModel);
-
+        if (binding == null) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_list, container, false);
+            viewModel = ViewModelProviders.of(this).get(EventListViewModel.class);
+            binding.setViewModel(viewModel);
+        }
         setViews();
         setUpObservers();
 
