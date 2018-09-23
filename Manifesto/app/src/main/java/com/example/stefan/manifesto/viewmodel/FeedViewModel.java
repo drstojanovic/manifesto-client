@@ -44,7 +44,12 @@ public class FeedViewModel extends BaseViewModel {
         });
     }
 
-    public void onFloatingButtonClick() {
+    public void onFabAddRegularPostClick() {
+
+    }
+
+
+    public void onFabAddAlertPostClick() {
 
     }
 

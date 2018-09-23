@@ -22,7 +22,11 @@
     <string name="event_image">Event image</string>
     <string name="following">Following</string>
     <string name="follow">Follow</string>
-    <string name="description">Description</string>
     <string name="time_of_event">Time of event</string>
     <string name="active_events">Active events</string>
+    <string name="description">Description</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="select_photo">Select photo</string>
+    <string name="add_escape_route">Add escape route</string>
+    <string name="create_post">Create</string>
 </resources>

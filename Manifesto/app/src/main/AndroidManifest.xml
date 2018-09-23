@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".ui.activity.SignUpActivity" />
         <activity android:name=".ui.activity.ShowEventActivity" />
+        <activity android:name=".ui.activity.AddPostActivity" />
 
     </application>
 

@@ -22,15 +22,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_add_post"
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab_add_post"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:onClick="@{() -> viewModel.onFloatingButtonClick()}"-->
+            <!--android:src="@drawable/ic_add_black_24dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent" />-->
+
+        <com.github.clans.fab.FloatingActionMenu
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:onClick="@{() -> viewModel.onFloatingButtonClick()}"
             android:src="@drawable/ic_add_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:menu_colorNormal="@color/colorPrimaryDark"
+            app:menu_showShadow="true"
+            app:menu_colorPressed="@color/colorAccent">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/add_emergency_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onFabAddRegularPostClick()}"
+                android:src="@drawable/ic_add_alert_black_24dp"
+                app:fab_label="Add standard post"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/add_standard_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onFabAddAlertPostClick()}"
+                android:src="@drawable/ic_dashboard_black_24dp"
+                app:fab_label="Add emergency post"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
 
     </android.support.constraint.ConstraintLayout>
 
