@@ -21,4 +21,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(new Intent(this, activityClass));
     }
 
+    public void navigateToActivityForResult(Class activityClass, int requestCode) {
+        startActivityForResult(new Intent(this, activityClass), requestCode);
+    }
+
 }

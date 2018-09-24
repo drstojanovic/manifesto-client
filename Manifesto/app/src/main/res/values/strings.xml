@@ -29,4 +29,5 @@
     <string name="select_photo">Select photo</string>
     <string name="add_escape_route">Add escape route</string>
     <string name="create_post">Create</string>
+    <string name="title_activity_map">Map</string>
 </resources>

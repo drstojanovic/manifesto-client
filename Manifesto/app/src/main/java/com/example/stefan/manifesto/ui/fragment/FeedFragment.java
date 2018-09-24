@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.stefan.manifesto.MapActivity;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.FragmentFeedBinding;
-import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
-import com.example.stefan.manifesto.ui.adapter.EventAdapter;
+import com.example.stefan.manifesto.ui.activity.AddPostActivity;
 import com.example.stefan.manifesto.ui.adapter.FeedAdapter;
 import com.example.stefan.manifesto.viewmodel.FeedViewModel;
 
@@ -58,6 +58,13 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
                     makeToast(R.string.error);
                 }
                 setAdapter(list);
+            }
+        });
+
+        viewModel.getFabRegularPost().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                navigateToActivity(AddPostActivity.class);
             }
         });
     }

@@ -8,6 +8,7 @@ import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.repository.EventRepository;
 import com.example.stefan.manifesto.repository.FeedRepository;
+import com.example.stefan.manifesto.utils.SingleLiveEvent;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class FeedViewModel extends BaseViewModel {
 
     private FeedRepository repository = new FeedRepository();
     private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> fabRegularPost = new SingleLiveEvent<>();
 
     public FeedViewModel() {
         getAllPostsForCurrentUserEvents();
@@ -45,7 +47,7 @@ public class FeedViewModel extends BaseViewModel {
     }
 
     public void onFabAddRegularPostClick() {
-
+        fabRegularPost.setValue(true);
     }
 
 
@@ -55,5 +57,9 @@ public class FeedViewModel extends BaseViewModel {
 
     public LiveData<List<Post>> getPosts() {
         return posts;
+    }
+
+    public LiveData<Boolean> getFabRegularPost() {
+        return fabRegularPost;
     }
 }
