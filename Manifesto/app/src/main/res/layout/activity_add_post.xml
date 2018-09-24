@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/toolbar"
+            android:id="@+id/appbar"
             layout="@layout/toolbar" />
 
         <ScrollView
@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/appbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
