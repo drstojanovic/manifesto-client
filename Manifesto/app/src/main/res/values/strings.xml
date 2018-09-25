@@ -32,4 +32,5 @@
     <string name="title_activity_map">Map</string>
     <string name="choose_event">Choose event</string>
     <string name="event">Event</string>
+    <string name="file_provider_authority" translatable="false">com.example.stefan.manifesto.fileprovider</string>
 </resources>
