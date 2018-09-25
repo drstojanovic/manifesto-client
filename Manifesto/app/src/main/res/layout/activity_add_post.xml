@@ -33,20 +33,63 @@
                 android:padding="12dp">
 
                 <TextView
-                    android:id="@+id/text_description"
+                    android:id="@+id/text_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/description"
+                    android:text="@string/event"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <LinearLayout
+                    android:id="@+id/spiner_container"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/dark_primary_color_box"
+                    android:onClick="@{() -> viewModel.onSpinnerEventChooserClick()}"
+                    android:orientation="horizontal"
+                    android:padding="7dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Spinner
+                        android:id="@+id/spinner_event"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:spinnerMode="dropdown"
+                        android:text="@string/choose_event" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onClick="@{() -> viewModel.onSpinnerEventChooserClick()}"
+                        android:src="@drawable/ic_arrow_down" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spiner_container" />
+
                 <EditText
                     android:id="@+id/edit_description"
-                    style="@style/EditTextStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:inputType="textMultiLine"
-                    android:text="@{viewModel.post.text}"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dark_primary_color_box"
+                    android:padding="7dp"
+                    android:text="@={viewModel.post.text}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_description" />
@@ -60,11 +103,11 @@
                     android:layout_weight="1"
                     android:background="@drawable/primary_color_box"
                     android:drawableStart="@drawable/ic_camera"
+                    android:onClick="@{() -> viewModel.onTakePictureButtonClick()}"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/take_a_photo"
                     android:textSize="12sp"
-                    android:onClick="@{() -> viewModel.onTakePictureButtonClick()}"
                     app:layout_constraintEnd_toStartOf="@+id/btn_select_photos"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,11 +122,11 @@
                     android:layout_weight="1"
                     android:background="@drawable/primary_color_box"
                     android:drawableStart="@drawable/ic_photo_library"
+                    android:onClick="@{() -> viewModel.onSelectPictureButtonClick()}"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/select_photo"
                     android:textSize="12sp"
-                    android:onClick="@{() -> viewModel.onSelectPictureButtonClick()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/btn_take_picture"
@@ -97,34 +140,22 @@
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-                    tools:context=".MapActivity"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_take_picture" />
+                    app:layout_constraintTop_toBottomOf="@+id/btn_take_picture"
+                    tools:context=".MapActivity" />
 
                 <Button
                     android:id="@+id/btn_add_escape_route"
                     style="@style/ButtonLightYellow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_escape_route"
+                    android:layout_marginTop="10dp"
                     android:onClick="@{() -> viewModel.onAddEscapeRouteButtonClick()}"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_create_post"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragment_map" />
-
-                <Button
-                    android:id="@+id/btn_create_post"
-                    style="@style/ButtonTertiaryColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/create_post"
-                    android:onClick="@{() -> viewModel.onCreatePostButtonClick()}"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/add_escape_route"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btn_add_escape_route"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragment_map" />
 
             </android.support.constraint.ConstraintLayout>

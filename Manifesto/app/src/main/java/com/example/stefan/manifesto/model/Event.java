@@ -15,6 +15,22 @@ public class Event {
     private String description;
 
 
+    public Event() {
+
+    }
+
+    public Event(Integer id, String name, Date startDate, Date endDate, String location, Double latitude, Double longitude, String image, String description) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.image = image;
+        this.description = description;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -85,5 +101,10 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

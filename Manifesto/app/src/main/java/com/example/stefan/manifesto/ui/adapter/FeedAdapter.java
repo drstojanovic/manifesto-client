@@ -6,13 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.stefan.manifesto.databinding.FragmentFeedBinding;
-import com.example.stefan.manifesto.databinding.ItemEventBinding;
 import com.example.stefan.manifesto.databinding.ItemFeedBinding;
 import com.example.stefan.manifesto.model.Post;
-import com.example.stefan.manifesto.ui.fragment.FeedFragment;
 import com.example.stefan.manifesto.viewmodel.FeedItemViewModel;
-import com.example.stefan.manifesto.viewmodel.FeedViewModel;
 
 import java.util.List;
 

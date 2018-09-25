@@ -5,6 +5,9 @@ import java.util.Date;
 
 public class Post {
 
+    public static final String REGULAR_TYPE = "regular";
+    public static final String EMERGENCY_TYPE = "emergency";
+
     private int id;
     private String image;
     private String text;

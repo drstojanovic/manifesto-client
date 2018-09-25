@@ -4,10 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
-import com.example.stefan.manifesto.repository.EventRepository;
-import com.example.stefan.manifesto.repository.FeedRepository;
+import com.example.stefan.manifesto.repository.PostRepository;
 import com.example.stefan.manifesto.utils.SingleLiveEvent;
 
 import java.util.List;
@@ -19,7 +17,7 @@ import static android.content.ContentValues.TAG;
 
 public class FeedViewModel extends BaseViewModel {
 
-    private FeedRepository repository = new FeedRepository();
+    private PostRepository repository = new PostRepository();
     private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> fabRegularPost = new SingleLiveEvent<>();
 

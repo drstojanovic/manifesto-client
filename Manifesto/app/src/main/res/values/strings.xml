@@ -30,4 +30,6 @@
     <string name="add_escape_route">Add escape route</string>
     <string name="create_post">Create</string>
     <string name="title_activity_map">Map</string>
+    <string name="choose_event">Choose event</string>
+    <string name="event">Event</string>
 </resources>

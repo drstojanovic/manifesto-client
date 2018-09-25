@@ -16,4 +16,7 @@ public interface EventDao {
     @GET("event/{id}")
     Single<Event> getEventById(@Path("id") int id);
 
+    @GET("event/userId/{id}")
+    Single<List<Event>> getAllEventsOfUser(@Path("id") int id);
+
 }
