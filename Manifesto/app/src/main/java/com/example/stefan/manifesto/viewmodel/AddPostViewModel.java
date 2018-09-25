@@ -88,7 +88,7 @@ public class AddPostViewModel extends BaseViewModel {
         p.setEventId(postEvent.getId());
         p.setLatitude(postLocation.latitude);
         p.setLongitude(postLocation.longitude);
-        p.setTime(DateUtils.getProperDateFormat(new Date()));
+        p.setTime(new Date());
         p.setType(Post.REGULAR_TYPE);
         p.setUser(UserSession.getUser());
         return p;
