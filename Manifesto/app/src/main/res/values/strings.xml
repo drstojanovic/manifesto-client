@@ -35,4 +35,7 @@
     <string name="file_provider_authority" translatable="false">com.example.stefan.manifesto.fileprovider</string>
     <string name="selected_photo">Selected image</string>
     <string name="location">Location</string>
+    <string name="reset">Reset</string>
+    <string name="start_selecting_route">Start selecting route</string>
+    <string name="save">Save</string>
 </resources>
