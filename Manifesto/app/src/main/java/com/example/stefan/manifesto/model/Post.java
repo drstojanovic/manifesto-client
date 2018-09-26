@@ -15,11 +15,11 @@ public class Post {
     private Double longitude;
     private Date time;
     private String type;
-    private int eventId;
+    private Integer eventId;
     private User user;
 
     public Post(int id, String image, String text, Double latitude, Double longitude, Date time, String type,
-                int eventId, User user) {
+                Integer eventId, User user) {
         super();
         this.id = id;
         this.image = image;
@@ -92,11 +92,11 @@ public class Post {
         this.type = type;
     }
 
-    public int getEventId() {
+    public Integer getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(Integer eventId) {
         this.eventId = eventId;
     }
 

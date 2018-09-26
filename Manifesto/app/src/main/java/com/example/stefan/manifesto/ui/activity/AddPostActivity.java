@@ -24,9 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
-import com.example.stefan.manifesto.MapActivity;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivityAddPostBinding;
 import com.example.stefan.manifesto.model.Event;
@@ -126,7 +124,7 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
             public void onChanged(@Nullable Boolean aBoolean) {
                 startActivityForResult(new Intent()
                         .setType("image/*")
-                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
                         .setAction(Intent.ACTION_GET_CONTENT), AddPostViewModel.RC_GALLERY);
             }
         });

@@ -6,23 +6,24 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.repository.EventRepository;
 import com.example.stefan.manifesto.repository.PostRepository;
-import com.example.stefan.manifesto.utils.DateUtils;
+import com.example.stefan.manifesto.utils.Constants;
 import com.example.stefan.manifesto.utils.FirebaseOperations;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.utils.SingleLiveEvent;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +32,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class AddPostViewModel extends BaseViewModel {
 
@@ -101,17 +105,50 @@ public class AddPostViewModel extends BaseViewModel {
         });
     }
 
-    private void saveImages(int postId) {
-        StorageReference ref = FirebaseOperations.getInstance().getStorageReference().child(String.valueOf(postId));
-//        for (int i = 0; i < imageUris.size(); i++) {
-//            if (imageUris.get(i) != null)
-                ref.child("img"+0).putFile(imageUris.get(0)).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+    private void saveImages(final int postId) {
+        if (imageUris == null || imageUris.size() == 0) return;
 
+        StorageReference ref = FirebaseOperations.getInstance().getStorageReference()
+                .child(Constants.FIREBASE_POSTS)
+                .child(String.valueOf(postId));
+        ref.child("img" + 0).putFile(imageUris.get(0)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                saveImageUrlInDatabase(postId);
+            }
+        });
+    }
+
+    private void saveImageUrlInDatabase(final int postId) {
+        FirebaseOperations.getInstance().getStorageReference()
+                .child(Constants.FIREBASE_POSTS)
+                .child(String.valueOf(postId))
+                .child("img0")
+                .getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Post p = creationResponse.getValue().getResponseBody();
+                        p.setImage(uri.toString());
+                        postRepository.updatePost(p,
+                                new SingleObserver<ResponseMessage<Post>>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(ResponseMessage<Post> postResponseMessage) {
+                                        Log.e(TAG, "onSuccess: ");
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Log.e(TAG, "onError: ");
+                                    }
+                                });
                     }
                 });
-//        }
     }
 
     private Post extractPost(LatLng postLocation) {
@@ -124,7 +161,7 @@ public class AddPostViewModel extends BaseViewModel {
         p.setEventId(postEvent.getId());
         p.setLatitude(postLocation.latitude);
         p.setLongitude(postLocation.longitude);
-        p.setTime(new Date());
+        p.setTime(DateTime.now().minusHours(2).toDate());
         p.setType(Post.REGULAR_TYPE);
         p.setUser(UserSession.getUser());
         return p;
@@ -142,14 +179,9 @@ public class AddPostViewModel extends BaseViewModel {
         btnAddEscapeRoute.setValue(true);
     }
 
-    public void onCreatePostButtonClick() {
-
-    }
-
     public void onSpinnerEventChooserClick() {
 
     }
-
 
     public void setSelectedEvent(Event event) {
         postEvent = event;
@@ -168,18 +200,18 @@ public class AddPostViewModel extends BaseViewModel {
         if (requestCode == RC_CAMERA) {
             imageUris.add(capturedImageUri);
         }
-//        else if (requestCode == RC_GALLERY) {
-//            if (data != null) {
-//                if (data.getClipData() != null) {   //multiple images selected
-//                    int count = data.getClipData().getItemCount();
-//                    for (int i = 0; i < count; i++) {
-//                        imageUris.add(data.getClipData().getItemAt(i).getUri());
-//                    }
-//                } else {                        //single image selected
-//                    imageUris.add(data.getData());
-//                }
-//            }
-//        }
+        else if (requestCode == RC_GALLERY) {
+            if (data != null) {
+                if (data.getClipData() != null) {   //multiple images selected
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        imageUris.add(data.getClipData().getItemAt(i).getUri());
+                    }
+                } else {                        //single image selected
+                    imageUris.add(data.getData());
+                }
+            }
+        }
     }
 
 
@@ -195,12 +227,15 @@ public class AddPostViewModel extends BaseViewModel {
     public ObservableField<Post> getPost() {
         return post;
     }
+
     public String getText() {
         return post.get().getText();
     }
+
     public void setText(String text) {
         post.get().setText(text);
     }
+
     public LiveData<Boolean> getBtnAddEscapeRoute() {
         return btnAddEscapeRoute;
     }
@@ -208,6 +243,7 @@ public class AddPostViewModel extends BaseViewModel {
     public LiveData<List<Event>> getEvents() {
         return events;
     }
+
     public LiveData<ResponseMessage<Post>> getCreationResponse() {
         return creationResponse;
     }

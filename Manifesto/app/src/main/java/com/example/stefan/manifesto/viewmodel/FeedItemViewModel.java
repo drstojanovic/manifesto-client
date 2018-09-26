@@ -10,9 +10,9 @@ public class FeedItemViewModel extends BaseViewModel {
         post = new Post();
     }
 
-    public FeedItemViewModel(Post event) {
+    public FeedItemViewModel(Post post) {
         super();
-        this.post = event;
+        this.post = post;
     }
 
     public Post getPost() {

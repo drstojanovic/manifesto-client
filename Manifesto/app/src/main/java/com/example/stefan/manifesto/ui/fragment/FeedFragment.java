@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.stefan.manifesto.MapActivity;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.FragmentFeedBinding;
 import com.example.stefan.manifesto.model.Post;

@@ -31,4 +31,19 @@ public class PostRepository extends BaseRepository {
     }
 
 
+    public void updateImageUrl(int postId, String imageUrl, SingleObserver<Integer> observer) {
+        ApiManager.getPostDao().setImageUrl(postId,imageUrl)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
+
+    public void updatePost(Post post, SingleObserver<ResponseMessage<Post>> observer) {
+        ApiManager.getPostDao().updatePost(post.getId(), post)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
 }
