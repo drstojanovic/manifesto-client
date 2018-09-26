@@ -45,6 +45,7 @@ public class AddPostViewModel extends BaseViewModel {
     public static final int RC_GALLERY = 2;
 
     private ObservableField<Post> post = new ObservableField<>();
+    private ObservableField<String> imageUrl = new ObservableField<>();
     private MutableLiveData<List<Event>> events = new MutableLiveData<>();
     private MutableLiveData<ResponseMessage<Post>> creationResponse = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> btnAddEscapeRoute = new SingleLiveEvent<>();
@@ -199,6 +200,7 @@ public class AddPostViewModel extends BaseViewModel {
     public void addNewImage(int requestCode, Intent data) {
         if (requestCode == RC_CAMERA) {
             imageUris.add(capturedImageUri);
+            imageUrl.set(capturedImageUri.toString());
         }
         else if (requestCode == RC_GALLERY) {
             if (data != null) {
@@ -206,9 +208,11 @@ public class AddPostViewModel extends BaseViewModel {
                     int count = data.getClipData().getItemCount();
                     for (int i = 0; i < count; i++) {
                         imageUris.add(data.getClipData().getItemAt(i).getUri());
+                        imageUrl.set(data.getClipData().getItemAt(i).getUri().toString());
                     }
                 } else {                        //single image selected
                     imageUris.add(data.getData());
+                    imageUrl.set(data.getData().toString());
                 }
             }
         }
@@ -236,6 +240,14 @@ public class AddPostViewModel extends BaseViewModel {
         post.get().setText(text);
     }
 
+    public ObservableField<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(ObservableField<String> imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public LiveData<Boolean> getBtnAddEscapeRoute() {
         return btnAddEscapeRoute;
     }
@@ -255,4 +267,5 @@ public class AddPostViewModel extends BaseViewModel {
     public LiveData<Boolean> getBtnTakePicture() {
         return btnTakePicture;
     }
+
 }

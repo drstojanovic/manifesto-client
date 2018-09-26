@@ -63,7 +63,18 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
         viewModel.getFabRegularPost().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                navigateToActivity(AddPostActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(AddPostActivity.POST_TYPE, AddPostActivity.REGULAR_TYPE);
+                navigateToActivity(AddPostActivity.class, bundle);
+            }
+        });
+
+        viewModel.getFabEmergencyPost().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(AddPostActivity.POST_TYPE, AddPostActivity.EMERGENCY_TYPE);
+                navigateToActivity(AddPostActivity.class, bundle);
             }
         });
     }

@@ -20,6 +20,7 @@ public class FeedViewModel extends BaseViewModel {
     private PostRepository repository = new PostRepository();
     private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> fabRegularPost = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> fabEmergencyPost = new SingleLiveEvent<>();
 
     public FeedViewModel() {
         getAllPostsForCurrentUserEvents();
@@ -50,7 +51,7 @@ public class FeedViewModel extends BaseViewModel {
 
 
     public void onFabAddAlertPostClick() {
-
+        fabEmergencyPost.setValue(true);
     }
 
     public LiveData<List<Post>> getPosts() {
@@ -59,5 +60,8 @@ public class FeedViewModel extends BaseViewModel {
 
     public LiveData<Boolean> getFabRegularPost() {
         return fabRegularPost;
+    }
+    public LiveData<Boolean> getFabEmergencyPost() {
+        return fabEmergencyPost;
     }
 }

@@ -11,6 +11,7 @@
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -132,18 +133,26 @@
                     app:layout_constraintStart_toEndOf="@+id/btn_take_picture"
                     app:layout_constraintTop_toBottomOf="@id/edit_description" />
 
+                <ImageView
+                    android:id="@+id/image_selected_image"
+                    imageUrl="@{viewModel.imageUrl}"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_take_picture" />
 
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:map="http://schemas.android.com/apk/res-auto"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/fragment_map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_take_picture"
+                    app:layout_constraintTop_toBottomOf="@+id/image_selected_image"
                     tools:context=".ui.activity.MapActivity" />
 
                 <Button
@@ -154,9 +163,11 @@
                     android:layout_marginTop="10dp"
                     android:onClick="@{() -> viewModel.onAddEscapeRouteButtonClick()}"
                     android:text="@string/add_escape_route"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragment_map" />
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_map"
+                    tools:visibility="visible" />
 
             </android.support.constraint.ConstraintLayout>
 

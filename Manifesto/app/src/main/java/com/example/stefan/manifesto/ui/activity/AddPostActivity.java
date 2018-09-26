@@ -47,6 +47,9 @@ import static com.example.stefan.manifesto.ManifestoApplication.getContext;
 public class AddPostActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final int PERMISSION_ACCESS_FINE_LOCATION = 1;
+    public static final String POST_TYPE = "postType";
+    public static final int REGULAR_TYPE = 1;
+    public static final int EMERGENCY_TYPE = 2;
 
     private AddPostViewModel viewModel;
     private ActivityAddPostBinding binding;
@@ -61,6 +64,11 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
         viewModel = ViewModelProviders.of(this).get(AddPostViewModel.class);
         binding.setViewModel(viewModel);
 
+        if (getIntent() != null) {
+            if (getIntent().getIntExtra(POST_TYPE, 0) == EMERGENCY_TYPE) {
+                binding.btnAddEscapeRoute.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         setUpObservers();
     }
@@ -124,7 +132,6 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
             public void onChanged(@Nullable Boolean aBoolean) {
                 startActivityForResult(new Intent()
                         .setType("image/*")
-//                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
                         .setAction(Intent.ACTION_GET_CONTENT), AddPostViewModel.RC_GALLERY);
             }
         });
