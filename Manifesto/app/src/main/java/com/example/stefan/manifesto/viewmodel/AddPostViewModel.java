@@ -57,6 +57,7 @@ public class AddPostViewModel extends BaseViewModel {
     private PostRepository postRepository = new PostRepository();
     private Uri capturedImageUri;
     private List<Uri> imageUris = new ArrayList<>();
+    private boolean isEmergencyType;
 
     public AddPostViewModel() {
         post.set(new Post());
@@ -163,7 +164,7 @@ public class AddPostViewModel extends BaseViewModel {
         p.setLatitude(postLocation.latitude);
         p.setLongitude(postLocation.longitude);
         p.setTime(DateTime.now().minusHours(2).toDate());
-        p.setType(Post.REGULAR_TYPE);
+        p.setType(isEmergencyType ? Post.EMERGENCY_TYPE : Post.REGULAR_TYPE);
         p.setUser(UserSession.getUser());
         return p;
     }
@@ -246,6 +247,14 @@ public class AddPostViewModel extends BaseViewModel {
 
     public void setImageUrl(ObservableField<String> imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isEmergencyType() {
+        return isEmergencyType;
+    }
+
+    public void setEmergencyType(boolean emergencyType) {
+        isEmergencyType = emergencyType;
     }
 
     public LiveData<Boolean> getBtnAddEscapeRoute() {

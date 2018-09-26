@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
         if (getIntent() != null) {
             if (getIntent().getIntExtra(POST_TYPE, 0) == EMERGENCY_TYPE) {
                 binding.btnAddEscapeRoute.setVisibility(View.VISIBLE);
+                viewModel.setEmergencyType(true);
             }
         }
         initViews();
@@ -85,7 +87,7 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
             case R.id.menu_item_add_post:
                 viewModel.createPost(postLocation);
                 break;
-            case R.id.home:
+            case android.R.id.home:
                 finish();
                 break;
         }
@@ -133,6 +135,14 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
                 startActivityForResult(new Intent()
                         .setType("image/*")
                         .setAction(Intent.ACTION_GET_CONTENT), AddPostViewModel.RC_GALLERY);
+            }
+        });
+
+        viewModel.getImageUrl().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                binding.imageSelectedImage.setVisibility(View.VISIBLE);
+                binding.textImage.setVisibility(View.VISIBLE);
             }
         });
     }
