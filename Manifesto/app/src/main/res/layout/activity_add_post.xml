@@ -31,6 +31,8 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:padding="12dp">
 
                 <TextView
@@ -47,7 +49,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/dark_primary_color_box"
-                    android:onClick="@{() -> viewModel.onSpinnerEventChooserClick()}"
                     android:orientation="horizontal"
                     android:padding="7dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +71,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onClick="@{() -> viewModel.onSpinnerEventChooserClick()}"
                         android:src="@drawable/ic_arrow_down" />
 
                 </LinearLayout>
@@ -138,11 +138,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    tools:visibility="visible"
                     android:text="@string/selected_photo"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btn_take_picture" />
+                    app:layout_constraintTop_toBottomOf="@id/btn_take_picture"
+                    tools:visibility="visible" />
 
 
                 <ImageView
@@ -152,10 +152,10 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="12dp"
                     android:visibility="gone"
-                    tools:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_image" />
+                    app:layout_constraintTop_toBottomOf="@id/text_image"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/text_place"
@@ -179,16 +179,28 @@
                     tools:context=".ui.activity.MapActivity" />
 
                 <Button
+                    android:id="@+id/btn_add_post_location"
+                    style="@style/ButtonLightYellow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:onClick="@{() -> viewModel.onAddPostLocationButtonClick()}"
+                    android:text="@string/set_post_location"
+                    app:layout_constraintEnd_toStartOf="@id/btn_add_escape_route"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_map" />
+
+                <Button
                     android:id="@+id/btn_add_escape_route"
                     style="@style/ButtonLightYellow"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:onClick="@{() -> viewModel.onAddEscapeRouteButtonClick()}"
                     android:text="@string/add_escape_route"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btn_add_post_location"
                     app:layout_constraintTop_toBottomOf="@+id/fragment_map"
                     tools:visibility="visible" />
 

@@ -10,9 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,17 +39,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.stefan.manifesto.ManifestoApplication.getContext;
 
 public class AddPostActivity extends BaseActivity implements OnMapReadyCallback {
 
-    private static final int PERMISSION_ACCESS_FINE_LOCATION = 1;
     public static final String POST_TYPE = "postType";
     public static final int REGULAR_TYPE = 1;
     public static final int EMERGENCY_TYPE = 2;
@@ -55,7 +60,9 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     private AddPostViewModel viewModel;
     private ActivityAddPostBinding binding;
     private GoogleMap googleMap;
-    private LatLng postLocation;
+    private Marker marker;
+    private Polyline polyline;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +92,11 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
-                viewModel.createPost(postLocation);
+                if (viewModel.getPostLocation() == null) {
+                    makeToast("Please select post location on map.");
+                    break;
+                }
+                viewModel.createPost();
                 break;
             case android.R.id.home:
                 finish();
@@ -95,17 +106,32 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     }
 
     private void setUpObservers() {
+        viewModel.getBtnAddPostLocation().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                Intent intent = new Intent(AddPostActivity.this, MapActivity.class);
+                intent.putExtra(MapActivity.PREVIOUSLY_SELECTED_LOCATION, viewModel.getPostLocation());
+                intent.putParcelableArrayListExtra(MapActivity.PREVIOUSLY_SELECTED_ROUTE, (ArrayList<? extends Parcelable>) viewModel.getSelectedEscapeRoutePoints());
+                intent.putExtra(MapActivity.SELECTION_TYPE, MapActivity.TYPE_SELECT_POST_LOCATION);
+                startActivityForResult(intent, MapActivity.RC_SELECT_POST_LOCATION);
+            }
+        });
+
         viewModel.getBtnAddEscapeRoute().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                navigateToActivityForResult(MapActivity.class, MapActivity.RC_SELECT_ROUTE);
+                Intent intent = new Intent(AddPostActivity.this, MapActivity.class);
+                intent.putExtra(MapActivity.PREVIOUSLY_SELECTED_LOCATION, viewModel.getPostLocation());
+                intent.putParcelableArrayListExtra(MapActivity.PREVIOUSLY_SELECTED_ROUTE, (ArrayList<? extends Parcelable>) viewModel.getSelectedEscapeRoutePoints());
+                intent.putExtra(MapActivity.SELECTION_TYPE, MapActivity.TYPE_SELECT_ESCAPE_ROUTE);
+                startActivityForResult(intent, MapActivity.RC_SELECT_ROUTE);
             }
         });
 
         viewModel.getEvents().observe(this, new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
-                if (events == null || events.size() == 0){
+                if (events == null || events.size() == 0) {
                     makeToast("No events followed");
                     finish();
                 }
@@ -153,7 +179,7 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setTitle("Add post");
+        setTitle(viewModel.isEmergencyType() ? "Add emergency post" : "Add post");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
@@ -175,56 +201,54 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACCESS_FINE_LOCATION);
-        } else {
-            setMyLocationMarker();
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void setMyLocationMarker() {
-        LocationManager locationManager = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-        if (locationManager != null) {
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location == null) {
-                showNoLocationInfo();
-                postLocation = new LatLng(43.3327, 21.9020);
-            } else {
-                postLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-            googleMap.addMarker(new MarkerOptions().position(postLocation).title("My current position"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 15));
-        }
-    }
-
-    private void showNoLocationInfo() {
-        makeToast("Can't find your location. Please turn on GPS.");
+        LatLng initialPosition = new LatLng(43.3327, 21.9020);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialPosition, 15));
     }
 
     private void setSpinner(List<Event> events) {
-        binding.spinnerEvent.setAdapter(new ArrayAdapter<Event>(this, android.R.layout.simple_spinner_item, events));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_ACCESS_FINE_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setMyLocationMarker();
-                }
+        binding.spinnerEvent.setAdapter(new ArrayAdapter<Event>(this, android.R.layout.simple_spinner_dropdown_item, events));
+        binding.spinerContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.spinnerEvent.performClick();
             }
-        }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            viewModel.addNewImage(requestCode, data);
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        switch (requestCode) {
+            case AddPostViewModel.RC_CAMERA:
+            case AddPostViewModel.RC_GALLERY:
+                viewModel.addNewImage(requestCode, data);
+                break;
+            case MapActivity.RC_SELECT_ROUTE:
+                ArrayList<LatLng> list = data.getParcelableArrayListExtra(MapActivity.EXTRA_SELECTED_POINTS);
+                viewModel.setSelectedRoutePoints(list);
+                drawRouteOnMap(list);
+                break;
+            case MapActivity.RC_SELECT_POST_LOCATION:
+                LatLng postLocation = data.getParcelableExtra(MapActivity.EXTRA_SELECTED_POST_LOCATION);
+                viewModel.setPostLocation(postLocation);
+                drawMarkerOnMap(postLocation);
+                break;
         }
+    }
+
+    private void drawMarkerOnMap(LatLng postLocation) {
+        if (marker != null) marker.remove();
+        marker = googleMap.addMarker(new MarkerOptions().position(postLocation).title("Post location"));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 15));
+    }
+
+    private void drawRouteOnMap(ArrayList<LatLng> list) {
+        if (polyline != null) polyline.remove();
+        if (list == null || list.size() == 0) return;
+        polyline = googleMap.addPolyline(new PolylineOptions().width(10).color(Color.RED).addAll(list));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(list.get(0), 15));
     }
 
     private void captureImageIntent() {

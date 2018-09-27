@@ -38,4 +38,5 @@
     <string name="reset">Reset</string>
     <string name="start_selecting_route">Start selecting route</string>
     <string name="save">Save</string>
+    <string name="set_post_location">Set post location</string>
 </resources>

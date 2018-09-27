@@ -50,7 +50,7 @@ public class FeedViewModel extends BaseViewModel {
     }
 
 
-    public void onFabAddAlertPostClick() {
+    public void onFabAddEmergencyPostClick() {
         fabEmergencyPost.setValue(true);
     }
 

@@ -15,11 +15,12 @@ public class Post {
     private Double longitude;
     private Date time;
     private String type;
+    private String escapeRoute;
     private Integer eventId;
     private User user;
 
     public Post(int id, String image, String text, Double latitude, Double longitude, Date time, String type,
-                Integer eventId, User user) {
+                String escapeRoute, Integer eventId, User user) {
         super();
         this.id = id;
         this.image = image;
@@ -28,6 +29,7 @@ public class Post {
         this.longitude = longitude;
         this.time = time;
         this.type = type;
+        this.escapeRoute = escapeRoute;
         this.eventId = eventId;
         this.user = user;
     }
@@ -90,6 +92,14 @@ public class Post {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getEscapeRoute() {
+        return escapeRoute;
+    }
+
+    public void setEscapeRoute(String escapeRoute) {
+        this.escapeRoute = escapeRoute;
     }
 
     public Integer getEventId() {

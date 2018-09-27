@@ -25,4 +25,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivityForResult(new Intent(this, activityClass), requestCode);
     }
 
+    public void navigateToActivityForResult(Class activityClass, int requestCode, Bundle data) {
+        Intent intent = new Intent(this, activityClass);
+        intent.putExtras(data);
+        startActivityForResult(intent, requestCode);
+    }
+
+
 }

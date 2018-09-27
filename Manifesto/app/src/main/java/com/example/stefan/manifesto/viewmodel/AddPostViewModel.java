@@ -21,9 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -44,13 +43,14 @@ public class AddPostViewModel extends BaseViewModel {
     public static final int RC_CAMERA = 1;
     public static final int RC_GALLERY = 2;
 
-    private ObservableField<Post> post = new ObservableField<>();
-    private ObservableField<String> imageUrl = new ObservableField<>();
     private MutableLiveData<List<Event>> events = new MutableLiveData<>();
-    private MutableLiveData<ResponseMessage<Post>> creationResponse = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> btnAddEscapeRoute = new SingleLiveEvent<>();
+    private ObservableField<String> imageUrl = new ObservableField<>();
     private SingleLiveEvent<Boolean> btnTakePicture = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> btnSelectPicture = new SingleLiveEvent<>();
+    private ObservableField<Post> post = new ObservableField<>();
+    private MutableLiveData<ResponseMessage<Post>> creationResponse = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> btnAddEscapeRoute = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> btnAddPostLocation = new SingleLiveEvent<>();
 
     private Event postEvent;
     private EventRepository eventRepository = new EventRepository();
@@ -58,6 +58,8 @@ public class AddPostViewModel extends BaseViewModel {
     private Uri capturedImageUri;
     private List<Uri> imageUris = new ArrayList<>();
     private boolean isEmergencyType;
+    private LatLng postLocation;
+    private List<LatLng> escapeRoute = new ArrayList<>();
 
     public AddPostViewModel() {
         post.set(new Post());
@@ -85,8 +87,8 @@ public class AddPostViewModel extends BaseViewModel {
         });
     }
 
-    public void createPost(LatLng postLocation) {
-        postRepository.createPost(extractPost(postLocation), new SingleObserver<ResponseMessage<Post>>() {
+    public void createPost() {
+        postRepository.createPost(extractPost(), new SingleObserver<ResponseMessage<Post>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -153,22 +155,10 @@ public class AddPostViewModel extends BaseViewModel {
                 });
     }
 
-    private Post extractPost(LatLng postLocation) {
-        Post p = post.get();
-        if (p == null) {
-            p = new Post();
-            p.setText("");
-        }
 
-        p.setEventId(postEvent.getId());
-        p.setLatitude(postLocation.latitude);
-        p.setLongitude(postLocation.longitude);
-        p.setTime(DateTime.now().minusHours(2).toDate());
-        p.setType(isEmergencyType ? Post.EMERGENCY_TYPE : Post.REGULAR_TYPE);
-        p.setUser(UserSession.getUser());
-        return p;
-    }
-
+    /**
+     * ============== BUTTONS ======================
+     */
     public void onTakePictureButtonClick() {
         btnTakePicture.setValue(true);
     }
@@ -177,18 +167,39 @@ public class AddPostViewModel extends BaseViewModel {
         btnSelectPicture.setValue(true);
     }
 
-    public void onAddEscapeRouteButtonClick() {
-        btnAddEscapeRoute.setValue(true);
+    public void onAddPostLocationButtonClick() {
+        btnAddPostLocation.setValue(true);
     }
 
-    public void onSpinnerEventChooserClick() {
-
+    public void onAddEscapeRouteButtonClick() {
+        btnAddEscapeRoute.setValue(true);
     }
 
     public void setSelectedEvent(Event event) {
         postEvent = event;
     }
 
+    /**
+     * ==================== HELPER FUNCTIONS =======================
+     */
+
+    private Post extractPost() {
+        Post p = post.get();
+        if (p == null) {
+            p = new Post();
+            p.setText("");
+        }
+
+        p.setEventId(postEvent.getId());
+        p.setLongitude(getPostLocation().longitude);
+        p.setLatitude(getPostLocation().latitude);
+        p.setTime(DateTime.now().minusHours(2).toDate());
+        p.setType(isEmergencyType ? Post.EMERGENCY_TYPE : Post.REGULAR_TYPE);
+        p.setUser(UserSession.getUser());
+        Gson gson = new Gson();
+        p.setEscapeRoute(gson.toJson(escapeRoute));
+        return p;
+    }
 
     public File createImageFile() throws IOException {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
@@ -202,8 +213,7 @@ public class AddPostViewModel extends BaseViewModel {
         if (requestCode == RC_CAMERA) {
             imageUris.add(capturedImageUri);
             imageUrl.set(capturedImageUri.toString());
-        }
-        else if (requestCode == RC_GALLERY) {
+        } else if (requestCode == RC_GALLERY) {
             if (data != null) {
                 if (data.getClipData() != null) {   //multiple images selected
                     int count = data.getClipData().getItemCount();
@@ -219,6 +229,9 @@ public class AddPostViewModel extends BaseViewModel {
         }
     }
 
+    /**
+     * =================== GETTERS AND SETTERS ===========================
+     */
 
     public Uri getCapturedImageUri() {
         return capturedImageUri;
@@ -227,7 +240,6 @@ public class AddPostViewModel extends BaseViewModel {
     public void setCapturedImageUri(Uri capturedImageUri) {
         this.capturedImageUri = capturedImageUri;
     }
-
 
     public ObservableField<Post> getPost() {
         return post;
@@ -276,5 +288,26 @@ public class AddPostViewModel extends BaseViewModel {
     public LiveData<Boolean> getBtnTakePicture() {
         return btnTakePicture;
     }
+
+    public LiveData<Boolean> getBtnAddPostLocation() {
+        return btnAddPostLocation;
+    }
+
+    public void setSelectedRoutePoints(ArrayList<LatLng> list) {
+        this.escapeRoute = list;
+    }
+
+    public List<LatLng> getSelectedEscapeRoutePoints() {
+        return this.escapeRoute;
+    }
+
+    public void setPostLocation(LatLng postLocation) {
+        this.postLocation = new LatLng(postLocation.latitude, postLocation.longitude);
+    }
+
+    public LatLng getPostLocation() {
+        return postLocation;
+    }
+
 
 }
