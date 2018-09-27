@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 
 public interface PostDao {
 
-    @POST("post/forEvents")
-    Single<List<Post>> getAllPostsForCurrentUserEvents(@Body List<Integer> eventIds);
+    @GET("post/relevantForUser/{id}")
+    Single<List<Post>> getAllPostsRelevatnForUser(@Path("id") int id);
 
     @POST("post/add")
     Single<ResponseMessage<Post>> createPost(@Body Post post);

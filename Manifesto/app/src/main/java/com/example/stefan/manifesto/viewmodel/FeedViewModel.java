@@ -26,12 +26,10 @@ public class FeedViewModel extends BaseViewModel {
         getAllPostsForCurrentUserEvents();
     }
 
-    public void getAllPostsForCurrentUserEvents() {
-        repository.getAllPostsForCurrentUserEvents(new SingleObserver<List<Post>>() {
+    private void getAllPostsForCurrentUserEvents() {
+        repository.getAllPostsRelevantForUser(new SingleObserver<List<Post>>() {
             @Override
-            public void onSubscribe(Disposable d) {
-
-            }
+            public void onSubscribe(Disposable d) {           }
 
             @Override
             public void onSuccess(List<Post> list) {
