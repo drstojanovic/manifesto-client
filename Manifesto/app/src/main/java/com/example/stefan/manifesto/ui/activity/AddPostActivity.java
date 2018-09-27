@@ -92,10 +92,6 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
-                if (viewModel.getPostLocation() == null) {
-                    makeToast("Please select post location on map.");
-                    break;
-                }
                 viewModel.createPost();
                 break;
             case android.R.id.home:
@@ -144,6 +140,9 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
             public void onChanged(@Nullable ResponseMessage<Post> response) {
                 if (response != null && response.getMessage() != null) {
                     makeToast(response.getMessage());
+                    if (response.isSuccess()) {
+                        finish();
+                    }
                 }
             }
         });

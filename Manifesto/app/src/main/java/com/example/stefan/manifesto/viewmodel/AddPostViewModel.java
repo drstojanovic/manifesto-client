@@ -88,6 +88,10 @@ public class AddPostViewModel extends BaseViewModel {
     }
 
     public void createPost() {
+        if (postLocation == null) {
+            creationResponse.setValue(new ResponseMessage<Post>(false, "Please select post location on map."));
+            return;
+        }
         postRepository.createPost(extractPost(), new SingleObserver<ResponseMessage<Post>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -96,8 +100,9 @@ public class AddPostViewModel extends BaseViewModel {
 
             @Override
             public void onSuccess(ResponseMessage<Post> postResponseMessage) {
-                creationResponse.setValue(postResponseMessage);
                 if (postResponseMessage != null && postResponseMessage.isSuccess() && postResponseMessage.getResponseBody() != null) {
+                    postResponseMessage.setSuccess(false);
+                    creationResponse.setValue(postResponseMessage);
                     saveImages(postResponseMessage.getResponseBody().getId());
                 }
             }
@@ -132,6 +137,7 @@ public class AddPostViewModel extends BaseViewModel {
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        if (creationResponse.getValue() == null) return;
                         Post p = creationResponse.getValue().getResponseBody();
                         p.setImage(uri.toString());
                         postRepository.updatePost(p,
@@ -143,7 +149,7 @@ public class AddPostViewModel extends BaseViewModel {
 
                                     @Override
                                     public void onSuccess(ResponseMessage<Post> postResponseMessage) {
-                                        Log.e(TAG, "onSuccess: ");
+                                        creationResponse.setValue(new ResponseMessage<Post>(true, "Post image saved"));
                                     }
 
                                     @Override
