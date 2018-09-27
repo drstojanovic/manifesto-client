@@ -25,4 +25,9 @@ public interface PostDao {
 
     @PUT("post/{id}")
     Single<ResponseMessage<Post>> updatePost(@Path("id") int id, @Body Post post);
+
+    @GET("post/{id}")
+    Single<Post> getPostById(@Path("id") int id);
+
+
 }

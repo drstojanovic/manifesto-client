@@ -92,6 +92,7 @@ public class AddPostViewModel extends BaseViewModel {
             creationResponse.setValue(new ResponseMessage<Post>(false, "Please select post location on map."));
             return;
         }
+
         postRepository.createPost(extractPost(), new SingleObserver<ResponseMessage<Post>>() {
             @Override
             public void onSubscribe(Disposable d) {

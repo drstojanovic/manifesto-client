@@ -33,6 +33,8 @@
         <activity
             android:name=".ui.activity.MapActivity"
             android:label="@string/title_activity_map"/>
+        <activity android:name=".ui.activity.ShowPostActivity"
+            android:label="Post"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

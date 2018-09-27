@@ -25,6 +25,13 @@ public class DateUtils {
         return simpleDateFormat.format(date);
     }
 
+    public static String getFullFormat(Date date) {
+        if (date == null) return "/";
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.US);
+        return simpleDateFormat.format(date);
+    }
+
     public static Date getProperDateFormat(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
         Date date1 = null;

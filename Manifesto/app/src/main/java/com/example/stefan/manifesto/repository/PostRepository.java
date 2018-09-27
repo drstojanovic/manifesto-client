@@ -45,4 +45,11 @@ public class PostRepository extends BaseRepository {
                 .subscribe(observer);
 
     }
+
+    public void getPostById(int id, SingleObserver<Post> observer) {
+        ApiManager.getPostDao().getPostById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }
