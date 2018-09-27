@@ -175,16 +175,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
     }
 
+    @SuppressLint("MissingPermission")
     private void setMyLocationMarker() {
         LatLng postLocation;
         LocationManager locationManager = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
         if (locationManager != null) {
-            @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location == null) {
                 showNoLocationInfo();
                 postLocation = new LatLng(43.3327, 21.9020);
             } else {
                 postLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.setMyLocationEnabled(true);
             }
             marker = mMap.addMarker(new MarkerOptions().position(postLocation).title("My current position"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 15));
