@@ -8,6 +8,7 @@ import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.PostRepository;
 import com.example.stefan.manifesto.repository.UserRepository;
+import com.example.stefan.manifesto.utils.UserSession;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class UserProfileViewModel extends BaseViewModel {
     private boolean isMyProfile;
 
     public UserProfileViewModel(int userId) {
+        isMyProfile = UserSession.getUser().getId() == userId;
         loadProfileData(userId);
         loadPostsOfUser(userId);
     }

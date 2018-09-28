@@ -32,6 +32,7 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivityAddPostBinding;
 import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.Post;
+import com.example.stefan.manifesto.ui.fragment.ScrollableMapFragment;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.viewmodel.AddPostViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -182,6 +183,13 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
+
+        ((ScrollableMapFragment) mapFragment).setListener(new ScrollableMapFragment.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                binding.scrollView.requestDisallowInterceptTouchEvent(true);
+            }
+        });
 
         binding.spinnerEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
