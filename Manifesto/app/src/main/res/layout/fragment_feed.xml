@@ -39,7 +39,9 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onFabAddEmergencyPostClick()}"
                 android:src="@drawable/ic_add_alert_black_24dp"
-                app:fab_label="Add emergency post"/>
+                app:fab_label="Add emergency post"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/add_standard_post"
@@ -47,7 +49,9 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onFabAddRegularPostClick()}"
                 android:src="@drawable/ic_dashboard_black_24dp"
-                app:fab_label="Add standard post"/>
+                app:fab_label="Add standard post"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

@@ -33,5 +33,12 @@ public class EventRepository extends BaseRepository {
                 .subscribe(observer);
     }
 
+    public void getEventName(int eventId, SingleObserver<String> observer) {
+        ApiManager.getEventDao().getEventName(eventId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 
 }

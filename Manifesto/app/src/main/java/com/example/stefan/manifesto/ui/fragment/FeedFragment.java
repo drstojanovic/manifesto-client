@@ -2,6 +2,7 @@ package com.example.stefan.manifesto.ui.fragment;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.FragmentFeedBinding;
 import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.ui.activity.AddPostActivity;
+import com.example.stefan.manifesto.ui.activity.ShowEventActivity;
+import com.example.stefan.manifesto.ui.activity.ShowPostActivity;
 import com.example.stefan.manifesto.ui.adapter.FeedAdapter;
 import com.example.stefan.manifesto.viewmodel.FeedViewModel;
 
@@ -95,6 +98,8 @@ public class FeedFragment extends BaseFragment implements FeedAdapter.OnPostClic
 
     @Override
     public void onPostClick(int postId) {
-
+        Intent intent = new Intent(getContext(), ShowPostActivity.class);
+        intent.putExtra(ShowPostActivity.EXTRA_POST_ID, postId);
+        startActivity(intent);
     }
 }

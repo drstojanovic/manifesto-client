@@ -1,15 +1,24 @@
 package com.example.stefan.manifesto.viewmodel;
 
+import android.databinding.ObservableField;
+import android.util.Log;
+
 import com.example.stefan.manifesto.model.Post;
+import com.example.stefan.manifesto.repository.EventRepository;
 import com.example.stefan.manifesto.repository.PostRepository;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class ShowPostViewModel extends BaseViewModel {
 
-    private Post post;
-    private PostRepository repository = new PostRepository();
+    private PostRepository postRepository = new PostRepository();
+    private EventRepository eventRepository = new EventRepository();
+
+    private ObservableField<Post> post = new ObservableField<>();   //ako je klasican post objekat, kad stignu podaci i setuje se taj objekat, nece se prikazati ti podaci
+    private ObservableField<String> eventName = new ObservableField<>();
 
     public ShowPostViewModel() {
 
@@ -20,7 +29,7 @@ public class ShowPostViewModel extends BaseViewModel {
     }
 
     private void loadPost(int postId) {
-        repository.getPostById(postId, new SingleObserver<Post>() {
+        postRepository.getPostById(postId, new SingleObserver<Post>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -28,7 +37,8 @@ public class ShowPostViewModel extends BaseViewModel {
 
             @Override
             public void onSuccess(Post post) {
-                ShowPostViewModel.this.post = post;
+                ShowPostViewModel.this.post.set(post);
+                getPostEventName(post.getEventId());
             }
 
             @Override
@@ -38,11 +48,36 @@ public class ShowPostViewModel extends BaseViewModel {
         });
     }
 
-    public Post getPost() {
+    private void getPostEventName(Integer eventId) {
+        eventRepository.getEventName(eventId, new SingleObserver<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {}
+
+            @Override
+            public void onSuccess(String s) {
+                eventName.set(s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onError: " + e.getMessage() );
+            }
+        });
+    }
+
+    public ObservableField<Post> getPost() {
         return post;
     }
 
-    public void setPost(Post post) {
+    public void setPost(ObservableField<Post> post) {
         this.post = post;
+    }
+
+    public ObservableField<String> getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(ObservableField<String> eventName) {
+        this.eventName = eventName;
     }
 }

@@ -49,36 +49,11 @@ public class LoginViewModel extends BaseViewModel {
                     @Override
                     public void onSuccess(ResponseMessage<User> userResponseMessage) {
                         response.setValue(userResponseMessage);
-                        if (userResponseMessage != null && userResponseMessage.getResponseBody() != null) {
-                            getFollowedEvents(userResponseMessage.getResponseBody().getId());
-                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         response.setValue(ResponseMessage.<User>error());
-                    }
-                });
-    }
-
-    private void getFollowedEvents(int id) {
-        repository.getFollowedEvents(id,
-                new SingleObserver<List<Integer>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<Integer> integers) {
-                        if (integers != null && integers.size() > 0) {
-                            UserSession.setFollowedEvents(integers);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
                     }
                 });
     }

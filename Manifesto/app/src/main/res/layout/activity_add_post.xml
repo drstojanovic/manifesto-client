@@ -176,7 +176,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_place"
-                    tools:context=".ui.activity.MapActivity" />
+                    tools:context=".ui.activity.MapActivity"
+                    class="com.example.stefan.manifesto.ui.fragment.ScrollableMapFragment"/>
 
                 <Button
                     android:id="@+id/btn_add_post_location"
