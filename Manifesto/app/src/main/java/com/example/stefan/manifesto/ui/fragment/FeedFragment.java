@@ -16,7 +16,6 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.FragmentFeedBinding;
 import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.ui.activity.AddPostActivity;
-import com.example.stefan.manifesto.ui.activity.ShowEventActivity;
 import com.example.stefan.manifesto.ui.activity.ShowPostActivity;
 import com.example.stefan.manifesto.ui.adapter.FeedAdapter;
 import com.example.stefan.manifesto.viewmodel.FeedViewModel;

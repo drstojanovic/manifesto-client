@@ -42,4 +42,6 @@
     <string name="time">Time</string>
     <string name="user_image">User image</string>
     <string name="message">Message</string>
+    <string name="edit">Edit</string>
+    <string name="edit_user_image">Edit user image</string>
 </resources>

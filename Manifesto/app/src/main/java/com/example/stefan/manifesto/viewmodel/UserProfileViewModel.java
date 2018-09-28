@@ -21,7 +21,7 @@ public class UserProfileViewModel extends BaseViewModel {
 
     private ObservableField<User> user = new ObservableField<>();
     private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
-    private ObservableField<Boolean> isMyProfile = new ObservableField<>();
+    private boolean isMyProfile;
 
     public UserProfileViewModel(int userId) {
         loadProfileData(userId);
@@ -85,12 +85,12 @@ public class UserProfileViewModel extends BaseViewModel {
         this.user = user;
     }
 
-    public ObservableField<Boolean> getIsMyProfile() {
+    public boolean isMyProfile() {
         return isMyProfile;
     }
 
-    public void setIsMyProfile(ObservableField<Boolean> isMyProfile) {
-        this.isMyProfile = isMyProfile;
+    public void setMyProfile(boolean myProfile) {
+        isMyProfile = myProfile;
     }
 
     public LiveData<List<Post>> getPosts() {

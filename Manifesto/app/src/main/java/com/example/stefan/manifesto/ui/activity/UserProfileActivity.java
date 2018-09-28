@@ -7,20 +7,22 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivityUserProfileBinding;
 import com.example.stefan.manifesto.model.Post;
-import com.example.stefan.manifesto.ui.adapter.EventAdapter;
 import com.example.stefan.manifesto.ui.adapter.FeedAdapter;
 import com.example.stefan.manifesto.viewmodel.UserProfileViewModel;
 import com.example.stefan.manifesto.viewmodel.UserProfileViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserProfileActivity extends BaseActivity implements FeedAdapter.OnPostClickInterface {
 
-    private static final String EXTRA_USER_ID = "EXTRA_USER_ID";
+    public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
+
     private UserProfileViewModel viewModel;
     private ActivityUserProfileBinding binding;
 
@@ -36,9 +38,23 @@ public class UserProfileActivity extends BaseActivity implements FeedAdapter.OnP
     }
 
     private void setUpViews() {
+        initToolbar();
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
         binding.recyclerPosts.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerPosts.setHasFixedSize(true);
-        binding.recyclerPosts.setAdapter(new FeedAdapter(null, this));
+        binding.recyclerPosts.setAdapter(new FeedAdapter(new ArrayList<Post>(), this));
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar_profile);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        setTitle("Profile");
     }
 
     private void setUpObservers() {
@@ -46,9 +62,15 @@ public class UserProfileActivity extends BaseActivity implements FeedAdapter.OnP
             @Override
             public void onChanged(@Nullable List<Post> list) {
                 ((FeedAdapter) binding.recyclerPosts.getAdapter()).setItems(list);
+                binding.btnUserAction.setText(viewModel.isMyProfile() ? getString(R.string.edit) : getString(R.string.message));
             }
         });
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
     @Override
