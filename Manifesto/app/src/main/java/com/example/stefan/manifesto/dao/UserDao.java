@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface LoginDao {
+public interface UserDao {
 
     @POST("user/signup")
     Single<ResponseMessage<User>> registerUser (@Body User user);
@@ -19,7 +19,6 @@ public interface LoginDao {
     @POST("user/login")
     Single<ResponseMessage<User>> loginUser(@Body User user);
 
-    @GET("following/eventsOfUser/{id}")
-    Single<List<Integer>> getFollowedEventsId (@Path("id") int id);
-
+    @GET("user/{id}")
+    Single<User> getUser(@Path("id") int id);
 }

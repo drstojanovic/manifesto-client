@@ -35,6 +35,7 @@
             android:label="@string/title_activity_map"/>
         <activity android:name=".ui.activity.ShowPostActivity"
             android:label="Post"/>
+        <activity android:name=".ui.activity.UserProfileActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

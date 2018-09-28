@@ -2,6 +2,7 @@ package com.example.stefan.manifesto.utils;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,11 @@ public class BindingAdapters {
                     .load(url)
                     .into(imageView);
         }
+    }
+
+    @BindingAdapter("visible")
+    public static void viewVisibility(View view, boolean visible) {
+        view.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
 }

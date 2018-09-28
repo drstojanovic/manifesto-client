@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private static final String BASE_URL = "http://10.14.116.218:8080/";
-    private static LoginDao loginDao;
+    private static UserDao userDao;
     private static EventDao eventDao;
     private static PostDao postDao;
     private static OkHttpClient client;
@@ -37,11 +37,11 @@ public class ApiManager {
         return client;
     }
 
-    public static LoginDao getLoginDao() {
-        if (loginDao == null) {
-            loginDao = retrofit.create(LoginDao.class);
+    public static UserDao getUserDao() {
+        if (userDao == null) {
+            userDao = retrofit.create(UserDao.class);
         }
-        return loginDao;
+        return userDao;
     }
 
     public static EventDao getEventDao() {

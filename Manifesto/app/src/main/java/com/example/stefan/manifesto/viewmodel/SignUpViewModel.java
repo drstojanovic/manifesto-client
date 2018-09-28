@@ -7,10 +7,9 @@ import android.databinding.ObservableField;
 import android.util.Log;
 
 import com.example.stefan.manifesto.model.User;
-import com.example.stefan.manifesto.repository.LoginRepository;
+import com.example.stefan.manifesto.repository.UserRepository;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 
-import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -19,7 +18,7 @@ import static android.content.ContentValues.TAG;
 public class SignUpViewModel extends ViewModel {
 
     private ObservableField<User> user = new ObservableField<>();
-    private LoginRepository repository = new LoginRepository();
+    private UserRepository repository = new UserRepository();
     private MutableLiveData<ResponseMessage<User>> response = new MutableLiveData<>();
 
     public SignUpViewModel() {

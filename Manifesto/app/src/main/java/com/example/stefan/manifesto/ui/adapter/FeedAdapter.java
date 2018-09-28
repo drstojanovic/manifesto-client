@@ -46,6 +46,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedItemViewHo
     }
 
 
+    public void setItems(List<Post> posts) {
+        this.posts.clear();
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+
 
     class FeedItemViewHolder extends RecyclerView.ViewHolder {
         private ItemFeedBinding binding;

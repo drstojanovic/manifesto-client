@@ -29,5 +29,7 @@ public interface PostDao {
     @GET("post/{id}")
     Single<Post> getPostById(@Path("id") int id);
 
+    @GET("post//user/{id}")
+    Single<List<Post>> getPostsOfUser(@Path("id") int id);
 
 }

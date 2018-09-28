@@ -5,12 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 
 import com.example.stefan.manifesto.model.User;
-import com.example.stefan.manifesto.repository.LoginRepository;
-import com.example.stefan.manifesto.utils.ButtonClickLiveData;
+import com.example.stefan.manifesto.repository.UserRepository;
 import com.example.stefan.manifesto.utils.ResponseMessage;
-import com.example.stefan.manifesto.utils.UserSession;
-
-import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -20,7 +16,7 @@ public class LoginViewModel extends BaseViewModel {
     private ObservableField<User> user = new ObservableField<>();
     private MutableLiveData<ResponseMessage<User>> response = new MutableLiveData<>();
     private MutableLiveData<Boolean> signUpButtonClick = new MutableLiveData<>();
-    private LoginRepository repository = new LoginRepository();
+    private UserRepository repository = new UserRepository();
 
     public LoginViewModel() {
         user.set(new User());

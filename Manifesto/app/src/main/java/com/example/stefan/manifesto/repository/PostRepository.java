@@ -52,4 +52,11 @@ public class PostRepository extends BaseRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+    public void getPostsOfUser(int userId, SingleObserver<List<Post>> observer) {
+        ApiManager.getPostDao().getPostsOfUser(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }

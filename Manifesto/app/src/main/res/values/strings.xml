@@ -40,4 +40,6 @@
     <string name="save">Save</string>
     <string name="set_post_location">Set post location</string>
     <string name="time">Time</string>
+    <string name="user_image">User image</string>
+    <string name="message">Message</string>
 </resources>

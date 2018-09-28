@@ -4,34 +4,31 @@ import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 
-import java.util.List;
-
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class LoginRepository {
+public class UserRepository {
 
     public void registerUser(User user, SingleObserver<ResponseMessage<User>> singleObserver) {
-//       subscribe(ApiManager.getLoginDao().registerUser(user), singleObserver);
-       ApiManager.getLoginDao().registerUser(user)
+       ApiManager.getUserDao().registerUser(user)
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(singleObserver);
     }
 
     public void loginUser(User user, SingleObserver<ResponseMessage<User>> singleObserver) {
-        ApiManager.getLoginDao().loginUser(user)
+        ApiManager.getUserDao().loginUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(singleObserver);
     }
 
-    public void getFollowedEvents(int userId, SingleObserver<List<Integer>> singleObserver) {
-        ApiManager.getLoginDao().getFollowedEventsId(userId)
+    public void getUser(int id, SingleObserver<User> observer) {
+        ApiManager.getUserDao().getUser(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(singleObserver);
+                .subscribe(observer);
     }
 
 }
