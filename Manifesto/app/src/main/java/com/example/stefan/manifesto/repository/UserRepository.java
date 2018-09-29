@@ -3,6 +3,7 @@ package com.example.stefan.manifesto.repository;
 import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.utils.ResponseMessage;
+import com.example.stefan.manifesto.utils.UserSession;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +27,13 @@ public class UserRepository {
 
     public void getUser(int id, SingleObserver<User> observer) {
         ApiManager.getUserDao().getUser(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void updateUser(User user, SingleObserver<ResponseMessage<User>> observer) {
+        ApiManager.getUserDao().updateUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

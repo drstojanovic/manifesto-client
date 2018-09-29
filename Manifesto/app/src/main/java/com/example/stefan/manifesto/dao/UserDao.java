@@ -9,6 +9,7 @@ import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserDao {
@@ -21,4 +22,7 @@ public interface UserDao {
 
     @GET("user/{id}")
     Single<User> getUser(@Path("id") int id);
+
+    @PUT("user/update")
+    Single<ResponseMessage<User>> updateUser(@Body User user);
 }
