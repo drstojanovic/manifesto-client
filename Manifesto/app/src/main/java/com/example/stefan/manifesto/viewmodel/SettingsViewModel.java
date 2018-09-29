@@ -64,6 +64,7 @@ public class SettingsViewModel extends BaseViewModel {
 
             @Override
             public void onSuccess(ResponseMessage<User> userResponseMessage) {
+                UserSession.setUser(userResponseMessage.getResponseBody());
                 savingResponse.setValue(userResponseMessage);
             }
 

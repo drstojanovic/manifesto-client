@@ -41,6 +41,7 @@ public class LoginActivity extends BaseActivity {
                 if (userResponseMessage.isSuccess()) {
                     UserSession.setUser(userResponseMessage.getResponseBody());
                     navigateToActivity(MainActivity.class);
+                    finish();
                 } else {
                     makeToast(userResponseMessage.getMessage());
                 }

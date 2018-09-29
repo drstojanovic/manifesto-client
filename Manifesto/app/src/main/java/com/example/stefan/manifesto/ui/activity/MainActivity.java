@@ -26,6 +26,7 @@ import com.example.stefan.manifesto.viewmodel.UserProfileViewModel;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String FRESH_START = "FRESH_START";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -36,6 +37,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
 
         if (savedInstanceState == null) {
+            putFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra(FRESH_START, false)) {
             putFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
         }
     }
