@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
+import android.support.v7.widget.SwitchCompat;
 
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.UserRepository;
@@ -28,16 +29,19 @@ public class SettingsViewModel extends BaseViewModel {
     private boolean imageChanged;
     private SingleLiveEvent<Boolean> imageClick = new SingleLiveEvent<>();
     private SingleLiveEvent<ResponseMessage<User>> savingResponse = new SingleLiveEvent<>();
+    private MutableLiveData<Boolean> switchTrackingService = new MutableLiveData<>();
 
     public SettingsViewModel() {
         user.set(UserSession.getUser());
         newImage.set(UserSession.getUser().getImage());
     }
 
+
+    //region SavingUserSettings
+
     public void onImageClick() {
         imageClick.setValue(true);
     }
-
     public void saveChanges() {
         if (!imageChanged) {
             saveSettingsNoImage();
@@ -96,6 +100,18 @@ public class SettingsViewModel extends BaseViewModel {
             imageChanged = true;
         }
     }
+//endregion
+
+    //regionServices
+
+    public void onSwitchTrackingCheckChanged(boolean isSwitchChecked) {
+        switchTrackingService.setValue(isSwitchChecked);
+    }
+
+
+    //endregion
+
+    //region GettersAndSetters
 
     public ObservableField<User> getUser() {
         return user;
@@ -128,4 +144,14 @@ public class SettingsViewModel extends BaseViewModel {
     public void setSavingResponse(SingleLiveEvent<ResponseMessage<User>> savingResponse) {
         this.savingResponse = savingResponse;
     }
+
+    public LiveData<Boolean> getSwitchTrackingService() {
+        return switchTrackingService;
+    }
+
+    public void setSwitchTrackingService(MutableLiveData<Boolean> switchTrackingService) {
+        this.switchTrackingService = switchTrackingService;
+    }
+
+    //endregion
 }

@@ -2,6 +2,7 @@ package com.example.stefan.manifesto.repository;
 
 import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.User;
+import com.example.stefan.manifesto.model.UserLocation;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.utils.UserSession;
 
@@ -34,6 +35,13 @@ public class UserRepository {
 
     public void updateUser(User user, SingleObserver<ResponseMessage<User>> observer) {
         ApiManager.getUserDao().updateUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void updateUserLocation(UserLocation userLocation, SingleObserver<Void> observer) {
+        ApiManager.getUserDao().updateUserLocation(userLocation)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

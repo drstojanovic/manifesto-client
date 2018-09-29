@@ -49,6 +49,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <service android:name=".service.LocationTrackingService" />
     </application>
 
 </manifest>

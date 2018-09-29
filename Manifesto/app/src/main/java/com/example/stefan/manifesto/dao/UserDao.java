@@ -1,6 +1,7 @@
 package com.example.stefan.manifesto.dao;
 
 import com.example.stefan.manifesto.model.User;
+import com.example.stefan.manifesto.model.UserLocation;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 
 import java.util.List;
@@ -25,4 +26,7 @@ public interface UserDao {
 
     @PUT("user/update")
     Single<ResponseMessage<User>> updateUser(@Body User user);
+
+    @PUT("userLocation/update")
+    Single<Void> updateUserLocation(@Body UserLocation userLocation);
 }
