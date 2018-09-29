@@ -17,11 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.ui.fragment.EventListFragment;
 import com.example.stefan.manifesto.ui.fragment.FeedFragment;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.example.stefan.manifesto.viewmodel.UserProfileViewModel;
+
+import java.util.Set;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -82,6 +85,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         Glide.with(this)
                 .load(UserSession.getUser().getImage())
+                .apply(RequestOptions.circleCropTransform())
                 .into(((ImageView) hearderview.findViewById(R.id.nav_header_image)));
         ((TextView) hearderview.findViewById(R.id.nav_header_user_name)).setText(UserSession.getUser().getName());
         ((TextView) hearderview.findViewById(R.id.nav_header_user_city)).setText(UserSession.getUser().getCity());
@@ -100,6 +104,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.menu_item_feed:
                 putFragment(FeedFragment.newInstance(), true, FeedFragment.class.getSimpleName());
                 break;
+            case R.id.menu_item_settings:
+                navigateToActivity(SettingsActivity.class);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

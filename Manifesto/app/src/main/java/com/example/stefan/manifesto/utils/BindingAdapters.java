@@ -27,6 +27,24 @@ public class BindingAdapters {
         }
     }
 
+    @BindingAdapter(value = {"imageUrl_round", "errorImageResId_round"}, requireAll = false)
+    public static void loadRoundImage(ImageView imageView, String url, Drawable errorImageResourceId) {
+        if (url == null) {
+            imageView.setImageDrawable(errorImageResourceId);
+        } else {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .circleCrop()
+                    .placeholder(errorImageResourceId)
+                    .error(errorImageResourceId);
+
+            Glide.with(imageView.getContext())
+                    .applyDefaultRequestOptions(options)
+                    .load(url)
+                    .into(imageView);
+        }
+    }
+
     @BindingAdapter("visible")
     public static void viewVisibility(View view, boolean visible) {
         view.setVisibility(visible ? View.VISIBLE : View.GONE);

@@ -31,8 +31,8 @@
             android:layout_height="50dp"
             android:contentDescription="@string/profile_image"
             android:scaleType="centerCrop"
-            imageUrl="@{viewModel.post.user.image}"
-            errorImageResId="@{@drawable/no_image_available}"
+            imageUrl_round="@{viewModel.post.user.image}"
+            errorImageResId_round="@{@drawable/no_image_available}"
             app:layout_constraintStart_toStartOf="@id/constraint_layout"
             app:layout_constraintTop_toTopOf="@id/constraint_layout"
             android:src="@drawable/no_image_available" />
