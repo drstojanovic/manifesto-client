@@ -44,4 +44,8 @@
     <string name="message">Message</string>
     <string name="edit">Edit</string>
     <string name="edit_user_image">Edit user image</string>
+    <string name="account">Account</string>
+    <string name="application">Application</string>
+    <string name="notifications">Notifications</string>
+    <string name="gps_tracking">GPS tracking</string>
 </resources>

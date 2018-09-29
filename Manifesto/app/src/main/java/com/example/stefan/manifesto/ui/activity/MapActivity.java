@@ -55,7 +55,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private LatLng selectedLocation;
     private ArrayList<LatLng> selectedPoints = new ArrayList<>();
-    private boolean routeSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         binding.setViewModel(viewModel);
 
         if (getIntent() != null && getIntent().getIntExtra(SELECTION_TYPE, -123) != -123) {
-            routeSelection = getIntent().getIntExtra(SELECTION_TYPE, -123) == TYPE_SELECT_ESCAPE_ROUTE;
+            viewModel.setIsRouteSelection(getIntent().getIntExtra(SELECTION_TYPE, -123) == TYPE_SELECT_ESCAPE_ROUTE);
             selectedPoints = getIntent().getParcelableArrayListExtra(PREVIOUSLY_SELECTED_ROUTE);
             selectedLocation = getIntent().getParcelableExtra(PREVIOUSLY_SELECTED_LOCATION);
         }
@@ -80,24 +79,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void setUpViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        initToolbar(viewModel.isRootSelectionType() ? "Set escape route" : "Set post location");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        if (routeSelection) {
-            setTitle("Set escape route");
-            binding.btnResetRoute.setVisibility(View.VISIBLE);
-        } else {
-            setTitle("Set post location");
-            binding.btnResetRoute.setVisibility(View.GONE);
-        }
-
     }
 
     private void setUpObservers() {
@@ -112,7 +98,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         viewModel.getSaveButton().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                if (routeSelection) {
+                if (viewModel.isRootSelectionType()) {
                     Intent i = new Intent();
                     i.putExtra(EXTRA_SELECTED_POINTS, selectedPoints);
                     setResult(RESULT_OK, i);
@@ -133,7 +119,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         checkPermissionAndSetMyLocationMarker();
         drawPreviousRouteAndLocation();
 
-        if (routeSelection) {
+        if (viewModel.isRootSelectionType()) {
             setMapClickListenerRouteSelectionMode();
         } else {
             setMapClickListenerPostLocationSelectionMode();

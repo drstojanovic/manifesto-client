@@ -46,7 +46,9 @@ public class ScrollableMapFragment extends SupportMapFragment {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_UP:
-                    mListener.onTouch();
+                    if (mListener != null) {
+                        mListener.onTouch();
+                    }
                     break;
             }
 

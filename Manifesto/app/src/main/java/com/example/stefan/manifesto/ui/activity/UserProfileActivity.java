@@ -38,7 +38,7 @@ public class UserProfileActivity extends BaseActivity implements FeedAdapter.OnP
     }
 
     private void setUpViews() {
-        initToolbar();
+        initToolbar("Profile");
         initRecyclerView();
     }
 
@@ -48,21 +48,25 @@ public class UserProfileActivity extends BaseActivity implements FeedAdapter.OnP
         binding.recyclerPosts.setAdapter(new FeedAdapter(new ArrayList<Post>(), this));
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar_profile);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle("Profile");
-    }
-
     private void setUpObservers() {
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
             public void onChanged(@Nullable List<Post> list) {
                 ((FeedAdapter) binding.recyclerPosts.getAdapter()).setItems(list);
                 binding.btnUserAction.setText(viewModel.isMyProfile() ? getString(R.string.edit) : getString(R.string.message));
+            }
+        });
+
+        viewModel.getBtnAction().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean myProfile) {
+                if (myProfile == null) return;
+
+                if (myProfile) {
+                    navigateToActivity(SettingsActivity.class);
+                } else {
+                    //messages
+                }
             }
         });
     }

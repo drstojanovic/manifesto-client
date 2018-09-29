@@ -48,7 +48,7 @@ public class ShowPostActivity extends BaseActivity implements OnMapReadyCallback
         viewModel = ViewModelProviders.of(this, new ShowPostViewModelFactory(getIntent().getIntExtra(EXTRA_POST_ID, 0))).get(ShowPostViewModel.class);
         binding.setViewModel(viewModel);
 
-        initToolbar();
+        initToolbar("Post");
         setUpObservers();
         setUpMap();
     }
@@ -72,15 +72,6 @@ public class ShowPostActivity extends BaseActivity implements OnMapReadyCallback
                 drawObjectsOnMap(viewModel.getPost().get());
             }
         });
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle("Post");
     }
 
     @Override

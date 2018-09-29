@@ -79,6 +79,8 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
                 viewModel.setEmergencyType(true);
             }
         }
+
+        initToolbar(viewModel.isEmergencyType() ? "Add emergency post" : "Add post");
         initViews();
         setUpObservers();
     }
@@ -174,13 +176,6 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     }
 
     private void initViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle(viewModel.isEmergencyType() ? "Add emergency post" : "Add post");
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
 

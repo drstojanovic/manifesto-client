@@ -8,6 +8,7 @@ import com.example.stefan.manifesto.model.Post;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.PostRepository;
 import com.example.stefan.manifesto.repository.UserRepository;
+import com.example.stefan.manifesto.utils.SingleLiveEvent;
 import com.example.stefan.manifesto.utils.UserSession;
 
 import java.util.List;
@@ -20,11 +21,14 @@ public class UserProfileViewModel extends BaseViewModel {
     private UserRepository userRepository = new UserRepository();
     private PostRepository postRepository = new PostRepository();
 
+    private int userId;
     private ObservableField<User> user = new ObservableField<>();
     private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> btnAction = new SingleLiveEvent<>();
     private boolean isMyProfile;
 
     public UserProfileViewModel(int userId) {
+        this.userId = userId;
         isMyProfile = UserSession.getUser().getId() == userId;
         loadProfileData(userId);
         loadPostsOfUser(userId);
@@ -68,9 +72,8 @@ public class UserProfileViewModel extends BaseViewModel {
         });
     }
 
-
-    public void onBtnMessageClick() {
-
+    public void onBtnUserActionClick() {
+        btnAction.setValue(userId == UserSession.getUser().getId());
     }
 
 
@@ -101,5 +104,13 @@ public class UserProfileViewModel extends BaseViewModel {
 
     public void setPosts(MutableLiveData<List<Post>> posts) {
         this.posts = posts;
+    }
+
+    public LiveData<Boolean> getBtnAction() {
+        return btnAction;
+    }
+
+    public void setBtnAction(SingleLiveEvent<Boolean> btnAction) {
+        this.btnAction = btnAction;
     }
 }

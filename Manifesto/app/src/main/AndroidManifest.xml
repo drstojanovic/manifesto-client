@@ -36,6 +36,7 @@
         <activity android:name=".ui.activity.ShowPostActivity"
             android:label="Post"/>
         <activity android:name=".ui.activity.UserProfileActivity" />
+        <activity android:name=".ui.activity.SettingsActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

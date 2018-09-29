@@ -27,8 +27,15 @@ public class ShowEventActivity extends BaseActivity {
                     new EventProfileViewModelFactory(getIntent().getIntExtra(EventListFragment.EXTRA_EVENT_ID, 0)))
                     .get(EventProfileViewModel.class);
 
+            initToolbar("Event");
             setUpObservers();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
     private void setUpObservers() {
