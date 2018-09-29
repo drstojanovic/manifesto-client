@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.stefan.manifesto.model.Event;
@@ -18,6 +19,7 @@ import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.utils.SingleLiveEvent;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -103,45 +105,52 @@ public class AddPostViewModel extends BaseViewModel {
             public void onSuccess(ResponseMessage<Post> postResponseMessage) {
                 if (postResponseMessage != null && postResponseMessage.isSuccess() && postResponseMessage.getResponseBody() != null) {
                     postResponseMessage.setSuccess(false);
-                    creationResponse.setValue(postResponseMessage);
-                    saveImages(postResponseMessage.getResponseBody().getId());
+                    saveImages(postResponseMessage.getResponseBody());
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                creationResponse.setValue(new ResponseMessage<Post>(false, "Error happened during saving."));
             }
         });
     }
 
-    private void saveImages(final int postId) {
-        if (imageUris == null || imageUris.size() == 0) return;
+    private void saveImages(final Post savedPost) {
+        if (imageUris == null || imageUris.size() == 0) {
+            creationResponse.setValue(new ResponseMessage<Post>(true, "Post created"));
+            return;
+        }
 
-        StorageReference ref = FirebaseOperations.getInstance().getStorageReference()
-                .child(Constants.FIREBASE_POSTS)
-                .child(String.valueOf(postId));
-        ref.child("img" + 0).putFile(imageUris.get(0)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                saveImageUrlInDatabase(postId);
-            }
-        });
-    }
-
-    private void saveImageUrlInDatabase(final int postId) {
         FirebaseOperations.getInstance().getStorageReference()
                 .child(Constants.FIREBASE_POSTS)
-                .child(String.valueOf(postId))
+                .child(String.valueOf(savedPost.getId()))
+                .child("img" + 0).putFile(imageUris.get(0))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        saveImageUrlInDatabase(savedPost);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        creationResponse.setValue(new ResponseMessage<Post>(false, "Error happened during saving."));
+                    }
+                });
+    }
+
+    private void saveImageUrlInDatabase(final Post savedPost) {
+        FirebaseOperations.getInstance().getStorageReference()
+                .child(Constants.FIREBASE_POSTS)
+                .child(String.valueOf(savedPost.getId()))
                 .child("img0")
                 .getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        if (creationResponse.getValue() == null) return;
-                        Post p = creationResponse.getValue().getResponseBody();
-                        p.setImage(uri.toString());
-                        postRepository.updatePost(p,
+                        savedPost.setImage(uri.toString());
+                        postRepository.updatePost(savedPost,
                                 new SingleObserver<ResponseMessage<Post>>() {
                                     @Override
                                     public void onSubscribe(Disposable d) {
@@ -150,12 +159,12 @@ public class AddPostViewModel extends BaseViewModel {
 
                                     @Override
                                     public void onSuccess(ResponseMessage<Post> postResponseMessage) {
-                                        creationResponse.setValue(new ResponseMessage<Post>(true, "Post image saved"));
+                                        creationResponse.setValue(new ResponseMessage<Post>(true, "Post created"));
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
-                                        Log.e(TAG, "onError: ");
+                                        creationResponse.setValue(new ResponseMessage<Post>(false, "Error happened during saving."));
                                     }
                                 });
                     }
@@ -200,7 +209,7 @@ public class AddPostViewModel extends BaseViewModel {
         p.setEventId(postEvent.getId());
         p.setLongitude(getPostLocation().longitude);
         p.setLatitude(getPostLocation().latitude);
-        p.setTime(DateTime.now().minusHours(2).toDate());
+        p.setTime(DateTime.now().toDate());
         p.setType(isEmergencyType ? Post.EMERGENCY_TYPE : Post.REGULAR_TYPE);
         p.setUser(UserSession.getUser());
         Gson gson = new Gson();

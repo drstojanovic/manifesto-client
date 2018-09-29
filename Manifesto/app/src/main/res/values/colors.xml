@@ -6,4 +6,5 @@
     <color name="colorLightYellow">#FFF9C4</color>
     <color name="colorLight">#FFE0B2</color>
     <color name="black">#000000</color>
+    <color name="transparent">#7000</color>
 </resources>

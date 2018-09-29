@@ -1,26 +1,17 @@
 package com.example.stefan.manifesto.ui.activity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,6 +86,8 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
+                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.imageLoading.setVisibility(View.VISIBLE);
                 viewModel.createPost();
                 break;
             case android.R.id.home:
@@ -144,6 +137,11 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
                 if (response != null && response.getMessage() != null) {
                     makeToast(response.getMessage());
                     if (response.isSuccess()) {
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.imageLoading.setVisibility(View.GONE);
+                        Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                        intent.putExtra(MainActivity.FRESH_START, true);
+                        startActivity(intent);
                         finish();
                     }
                 }

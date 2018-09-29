@@ -63,6 +63,7 @@ public class SettingsActivity extends BaseActivity {
             case R.id.menu_item_save_settings:
                 viewModel.saveChanges();
                 binding.progressBar.setVisibility(View.VISIBLE);
+                binding.imageLoading.setVisibility(View.VISIBLE);
                 break;
             case android.R.id.home:
                 finish();
@@ -87,6 +88,7 @@ public class SettingsActivity extends BaseActivity {
                     makeToast(userResponseMessage.getMessage());
                 }
                 binding.progressBar.setVisibility(View.GONE);
+                binding.imageLoading.setVisibility(View.GONE);
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 intent.putExtra(MainActivity.FRESH_START, true);
                 startActivity(intent);
