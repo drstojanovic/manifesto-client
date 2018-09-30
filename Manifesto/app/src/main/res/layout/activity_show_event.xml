@@ -9,6 +9,8 @@
 
         <import type="com.example.stefan.manifesto.utils.DateUtils"/>
 
+        <import type="com.example.stefan.manifesto.utils.UserSession"/>
+
     </data>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -87,10 +89,11 @@
 
                 <Button
                     android:id="@+id/btn_event_follow"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.onFollowButtonClick()}"
-                    android:text="@string/follow"
+                    android:text='@{UserSession.isUserFollowingEvent(viewModel.event.id) ? "Following" : "Follow"}'
+                    android:enabled="@{!UserSession.isUserFollowingEvent(viewModel.event.id)}"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -112,6 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/side_padding"
                     android:text="@string/time_of_event"
+                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/barrier" />
 
@@ -134,6 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/side_padding"
                     android:text="@string/description"
+                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_event_time" />
 

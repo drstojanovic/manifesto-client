@@ -14,8 +14,6 @@ public class Event {
     private String image;
     private String description;
 
-    private boolean isFollowedByCurrentUser;
-
     public Event() {
 
     }
@@ -102,14 +100,6 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isFollowedByCurrentUser() {
-        return isFollowedByCurrentUser;
-    }
-
-    public void setFollowedByCurrentUser(boolean followedByCurrentUser) {
-        isFollowedByCurrentUser = followedByCurrentUser;
     }
 
     @Override

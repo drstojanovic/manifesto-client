@@ -51,23 +51,23 @@ public class EventRepository extends BaseRepository {
                 .subscribe(observer);
     }
 
-    public void getAllEventsWithFollowingFlag(SingleObserver<List<Event>> observer) {
-        Single.zip(ApiManager.getEventDao().getAllEvents(), ApiManager.getEventDao().getFollowedEventsIds(UserSession.getUser().getId())
-                , new BiFunction<List<Event>, List<Integer>, List<Event>>() {
-                    @Override
-                    public List<Event> apply(List<Event> events, List<Integer> integers) throws Exception {
-                        for (Event event : events) {
-                            if (HelperUtils.isInList(integers, event.getId())) {
-                                event.setFollowedByCurrentUser(true);
-                            }
-                        }
-                        return events;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
+//    public void getAllEventsWithFollowingFlag(SingleObserver<List<Event>> observer) {
+//        Single.zip(ApiManager.getEventDao().getAllEvents(), ApiManager.getEventDao().getFollowedEventsIds(UserSession.getUser().getId())
+//                , new BiFunction<List<Event>, List<Integer>, List<Event>>() {
+//                    @Override
+//                    public List<Event> apply(List<Event> events, List<Integer> integers) throws Exception {
+//                        for (Event event : events) {
+//                            if (HelperUtils.isInList(integers, event.getId())) {
+//                                event.setFollowedByCurrentUser(true);
+//                            }
+//                        }
+//                        return events;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(observer);
+//    }
 
 
 }

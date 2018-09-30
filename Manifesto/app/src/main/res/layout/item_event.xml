@@ -9,6 +9,8 @@
 
         <import type="com.example.stefan.manifesto.utils.DateUtils"/>
 
+        <import type="com.example.stefan.manifesto.utils.UserSession"/>
+
     </data>
 
     <android.support.v7.widget.CardView
@@ -79,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:clickable="false"
-                android:checked="@{viewModel.event.followedByCurrentUser}"
+                android:checked="@{UserSession.isUserFollowingEvent(viewModel.event.id)}"
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

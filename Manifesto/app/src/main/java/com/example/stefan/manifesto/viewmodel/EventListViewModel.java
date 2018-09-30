@@ -24,8 +24,8 @@ public class EventListViewModel extends BaseViewModel {
         return events;
     }
 
-    public void getAllEvents() {
-        repository.getAllEventsWithFollowingFlag(new SingleObserver<List<Event>>() {
+    private void getAllEvents() {
+        repository.getAllEvents(new SingleObserver<List<Event>>() {
             @Override
             public void onSubscribe(Disposable d) {
 

@@ -25,7 +25,7 @@ public class UserSession {
         return followedEvents;
     }
 
-    public static boolean isFollowingEvent(int eventId) {
+    public static boolean isUserFollowingEvent(int eventId) {
         for (Integer followedEvent : followedEvents) {
             if (followedEvent.equals(eventId)) {
                 return true;
