@@ -51,6 +51,12 @@ public class EventListFragment extends BaseFragment implements EventAdapter.OnEv
         return binding.getRoot();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.getAllEvents();
+    }
+
     private void setViews() {
         binding.recyclerEvents.setHasFixedSize(true);
         binding.recyclerEvents.setLayoutManager(new LinearLayoutManager(getContext()));

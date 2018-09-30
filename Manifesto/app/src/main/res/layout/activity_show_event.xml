@@ -92,8 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.onFollowButtonClick()}"
-                    android:text='@{UserSession.isUserFollowingEvent(viewModel.event.id) ? "Following" : "Follow"}'
-                    android:enabled="@{!UserSession.isUserFollowingEvent(viewModel.event.id)}"
+                    android:text='@{UserSession.isUserFollowingEvent(viewModel.event.id) ? "Unfollow" : "Follow"}'
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

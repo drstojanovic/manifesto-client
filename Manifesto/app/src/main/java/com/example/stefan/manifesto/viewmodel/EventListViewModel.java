@@ -17,14 +17,14 @@ public class EventListViewModel extends BaseViewModel {
     private MutableLiveData<List<Event>> events = new MutableLiveData<>();
 
     public EventListViewModel() {
-        getAllEvents();
+
     }
 
     public LiveData<List<Event>> getEvents() {
         return events;
     }
 
-    private void getAllEvents() {
+    public void getAllEvents() {
         repository.getAllEvents(new SingleObserver<List<Event>>() {
             @Override
             public void onSubscribe(Disposable d) {

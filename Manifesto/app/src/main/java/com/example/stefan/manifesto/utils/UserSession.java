@@ -1,8 +1,15 @@
 package com.example.stefan.manifesto.utils;
 
+import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.User;
+import com.example.stefan.manifesto.repository.EventRepository;
 
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class UserSession {
 
@@ -33,4 +40,28 @@ public class UserSession {
         }
         return false;
     }
+
+//    public static void fetchFollowings() {
+//        ApiManager.getEventDao().getFollowedEventsIds(UserSession.getUser().getId())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<List<Integer>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<Integer> integers) {
+//                        setFollowedEvents(integers);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//                });
+//    }
+
+
 }

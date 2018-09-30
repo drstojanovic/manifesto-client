@@ -2,7 +2,9 @@ package com.example.stefan.manifesto.repository;
 
 import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.Event;
+import com.example.stefan.manifesto.model.Following;
 import com.example.stefan.manifesto.utils.HelperUtils;
+import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.utils.UserSession;
 
 import java.util.List;
@@ -69,5 +71,17 @@ public class EventRepository extends BaseRepository {
 //                .subscribe(observer);
 //    }
 
+    public void addNewFollowing(Following following, SingleObserver<ResponseMessage<Following>> observer) {
+        ApiManager.getEventDao().addNewFollowing(following)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 
+    public void removeFollowing(Following following, SingleObserver<ResponseMessage<Following>> observer) {
+        ApiManager.getEventDao().removeFollowing(following)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }
