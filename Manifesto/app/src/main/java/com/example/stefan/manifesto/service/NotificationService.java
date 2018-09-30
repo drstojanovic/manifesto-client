@@ -3,10 +3,13 @@ package com.example.stefan.manifesto.service;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
@@ -22,9 +25,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.ShutdownListener;
+import com.rabbitmq.client.ShutdownSignalException;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class NotificationService extends Service {
 
@@ -79,6 +86,13 @@ public class NotificationService extends Service {
                     channel.queueDeclare(MY_QUEUE, true, false, false, null);
                     channel.queueBind(MY_QUEUE, EXCHANGE_NAME, "#");
 
+                    channel.addShutdownListener(new ShutdownListener() {
+                        @Override
+                        public void shutdownCompleted(ShutdownSignalException cause) {
+                            Log.e(TAG, "shutdownCompleted: " + cause);
+                        }
+                    });
+
                     Consumer consumer = new DefaultConsumer(channel) {
                         @Override
                         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
@@ -122,6 +136,9 @@ public class NotificationService extends Service {
                 .setContentTitle("New Post")
                 .setContentText(notificationMessage.getMessage())
                 .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_feed)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(new long[]{500, 400, 200, 200, 200, 200, 200, 200, 200})
                 .setColor(getResources().getColor(R.color.colorPrimaryDark))
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true);

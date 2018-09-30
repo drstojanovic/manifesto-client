@@ -19,11 +19,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.stefan.manifesto.R;
+import com.example.stefan.manifesto.service.NotificationService;
 import com.example.stefan.manifesto.ui.fragment.EventListFragment;
 import com.example.stefan.manifesto.ui.fragment.FeedFragment;
+import com.example.stefan.manifesto.utils.HelperUtils;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.example.stefan.manifesto.viewmodel.UserProfileViewModel;
 
+import java.io.NotSerializableException;
 import java.util.Set;
 
 
@@ -42,6 +45,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (savedInstanceState == null) {
             putFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
+        }
+        startService(new Intent(this, NotificationService.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (HelperUtils.isMyServiceRunning(NotSerializableException.class)) {
+            stopService(new Intent(this, NotificationService.class));
         }
     }
 
