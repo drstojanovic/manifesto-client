@@ -1,5 +1,6 @@
 package com.example.stefan.manifesto.dao;
 
+import com.example.stefan.manifesto.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-    private static final String BASE_URL = "http://10.14.116.218:8080/";
+    private static final String BASE_URL = "http://" + Constants.HOST + ":8080/";
     private static UserDao userDao;
     private static EventDao eventDao;
     private static PostDao postDao;

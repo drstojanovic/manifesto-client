@@ -30,6 +30,7 @@ import java.util.Set;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String FRESH_START = "FRESH_START";
+    public static final int RC_NEW_POST_NOTIFICATION = 1;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
