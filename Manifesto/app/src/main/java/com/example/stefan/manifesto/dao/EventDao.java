@@ -21,4 +21,7 @@ public interface EventDao {
 
     @GET("event/getName/{id}")
     Single<String> getEventName(@Path("id") int id);
+
+    @GET("following/eventsOfUser/{id}")
+    Single<List<Integer>> getFollowedEventsIds(@Path("id") int id);
 }
