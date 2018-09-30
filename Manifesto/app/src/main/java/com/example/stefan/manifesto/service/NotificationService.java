@@ -42,6 +42,7 @@ public class NotificationService extends Service {
     private ConnectionFactory connectionFactory = new ConnectionFactory();
     private Thread subscriberThread;
     private Channel channel;
+    private Connection connection;
 
     private int POST_NOTIFICATION_ID = 1;
 
@@ -80,7 +81,7 @@ public class NotificationService extends Service {
             @Override
             public void run() {
                 try {
-                    Connection connection = connectionFactory.newConnection();
+                    connection = connectionFactory.newConnection();
                     channel = connection.createChannel();
                     channel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE);
                     channel.queueDeclare(MY_QUEUE, true, false, false, null);
@@ -99,7 +100,8 @@ public class NotificationService extends Service {
                             String message = new String(body, "UTF-8");
                             Gson gson = new Gson();
                             PostNotificationMessage notificationMessage = gson.fromJson(message, PostNotificationMessage.class);
-                            if (notificationMessage != null) {
+                            if (notificationMessage != null && notificationMessage.getUserId() != null
+                                    && notificationMessage.getUserId() != UserSession.getUser().getId()) {
                                 displayNotification(notificationMessage);
                             }
                         }
@@ -119,6 +121,7 @@ public class NotificationService extends Service {
             if (channel != null) {
                 channel.close();
             }
+            connection.close();
             subscriberThread.interrupt();
         } catch (TimeoutException | IOException e) {
             e.printStackTrace();

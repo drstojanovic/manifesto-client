@@ -35,7 +35,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final String FRESH_START = "FRESH_START";
     public static final int RC_NEW_POST_NOTIFICATION = 1;
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +51,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (HelperUtils.isMyServiceRunning(NotSerializableException.class)) {
-            stopService(new Intent(this, NotificationService.class));
-        }
+       // if (HelperUtils.isMyServiceRunning(NotificationService.class)) {
+//            makeToast("Stoping notification service.");
+//            stopService(new Intent(this, NotificationService.class));
+//        }
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initNavMenu() {
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (isNavItemChecked(item)) return false;
+//        if (isNavItemChecked(item)) return false;
 
         item.setChecked(true);
 
