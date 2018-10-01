@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 
+import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.EventRepository;
 import com.example.stefan.manifesto.repository.UserRepository;
@@ -63,17 +64,17 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     private void getFollowedEvents() {
-        eventRepository.getFollowedEventsIds(
-                new SingleObserver<List<Integer>>() {
+        eventRepository.getFollowedEventsOfCurrentUser(
+                new SingleObserver<List<Event>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(List<Integer> integers) {
-                        if (integers != null && integers.size() > 0) {
-                            UserSession.setFollowedEvents(integers);
+                    public void onSuccess(List<Event> events) {
+                        if (events != null && events.size() > 0) {
+                            UserSession.setFollowedEvents(events);
                         }
                     }
 

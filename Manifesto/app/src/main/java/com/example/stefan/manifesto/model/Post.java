@@ -16,12 +16,11 @@ public class Post {
     private Date time;
     private String type;
     private String escapeRoute;
+    private String eventName;
     private Integer eventId;
     private User user;
 
-    public Post(int id, String image, String text, Double latitude, Double longitude, Date time, String type,
-                String escapeRoute, Integer eventId, User user) {
-        super();
+    public Post(int id, String image, String text, Double latitude, Double longitude, Date time, String type, String escapeRoute, String eventName, Integer eventId, User user) {
         this.id = id;
         this.image = image;
         this.text = text;
@@ -30,6 +29,7 @@ public class Post {
         this.time = time;
         this.type = type;
         this.escapeRoute = escapeRoute;
+        this.eventName = eventName;
         this.eventId = eventId;
         this.user = user;
     }
@@ -116,5 +116,13 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 }

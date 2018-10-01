@@ -1,6 +1,7 @@
 package com.example.stefan.manifesto.utils;
 
 import com.example.stefan.manifesto.dao.ApiManager;
+import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.EventRepository;
@@ -15,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 public class UserSession {
 
     private static User user;
-    private static List<Integer> followedEvents;
+    private static List<Event> followedEvents;
 
     public static User getUser() {
         return user;
@@ -25,53 +26,30 @@ public class UserSession {
         user = newUser;
     }
 
-    public static void setFollowedEvents(List<Integer> followedEvents) {
+    public static void setFollowedEvents(List<Event> followedEvents) {
         UserSession.followedEvents = followedEvents;
         writeToSharedPrefsForFirstTime(followedEvents);
     }
 
-    private static void writeToSharedPrefsForFirstTime(List<Integer> followedEvents) {
-        for (Integer followedEvent : followedEvents) {
-            if (SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + followedEvent, -1) == -1) {
-                SharedPrefsUtils.getInstance().setValue(Constants.NOTIF_SETTINGS_ + followedEvent, NotificationsSettingsItem.Scope.ALL.ordinal());
+    private static void writeToSharedPrefsForFirstTime(List<Event> followedEvents) {
+        for (Event followedEvent : followedEvents) {
+            if (SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + followedEvent.getId(), -1) == -1) {
+                SharedPrefsUtils.getInstance().setValue(Constants.NOTIF_SETTINGS_ + followedEvent.getId(), NotificationsSettingsItem.Scope.ALL.ordinal());
             }
         }
     }
 
-    public static List<Integer> getFollowedEvents() {
+    public static List<Event> getFollowedEvents() {
         return followedEvents;
     }
 
     public static boolean isUserFollowingEvent(int eventId) {
-        for (Integer followedEvent : followedEvents) {
-            if (followedEvent.equals(eventId)) {
+        for (Event followedEvent : followedEvents) {
+            if (followedEvent.getId().equals(eventId)) {
                 return true;
             }
         }
         return false;
     }
-
-//    public static void fetchFollowings() {
-//        ApiManager.getEventDao().getFollowedEventsIds(UserSession.getUser().getId())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new SingleObserver<List<Integer>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(List<Integer> integers) {
-//                        setFollowedEvents(integers);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//                });
-//    }
-
 
 }

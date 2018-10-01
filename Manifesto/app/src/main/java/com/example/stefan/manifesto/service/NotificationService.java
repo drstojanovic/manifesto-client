@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -13,9 +12,12 @@ import android.util.Log;
 
 import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
+import com.example.stefan.manifesto.model.Event;
+import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.PostNotificationMessage;
 import com.example.stefan.manifesto.ui.activity.MainActivity;
 import com.example.stefan.manifesto.utils.Constants;
+import com.example.stefan.manifesto.utils.SharedPrefsUtils;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
@@ -85,7 +87,8 @@ public class NotificationService extends Service {
                     channel = connection.createChannel();
                     channel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE);
                     channel.queueDeclare(MY_QUEUE, true, false, false, null);
-                    channel.queueBind(MY_QUEUE, EXCHANGE_NAME, "#");
+//                    channel.queueBind(MY_QUEUE, EXCHANGE_NAME, "#");
+                    generateBindingKeyAndBindQueues(channel);
 
                     channel.addShutdownListener(new ShutdownListener() {
                         @Override
@@ -130,7 +133,7 @@ public class NotificationService extends Service {
 
     private void displayNotification(PostNotificationMessage notificationMessage) {
 
-        Intent intent = new Intent (this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("EXTRA_POST_ID", notificationMessage.getPostId());
         PendingIntent pendingIntent = PendingIntent.getActivity(this, MainActivity.RC_NEW_POST_NOTIFICATION,
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -148,6 +151,33 @@ public class NotificationService extends Service {
 
         NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
         nmc.notify(POST_NOTIFICATION_ID, builder.build());
+    }
+
+    private void generateBindingKeyAndBindQueues(Channel channel) throws IOException {
+        for (Event event : UserSession.getFollowedEvents()) {
+            int settingsOption = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), -1);
+            if (settingsOption == -1) continue;
+            NotificationsSettingsItem.Scope scope = NotificationsSettingsItem.Scope.values()[settingsOption];
+
+            channel.queueUnbind(MY_QUEUE, EXCHANGE_NAME, event.getName() + ".emergency");
+            channel.queueUnbind(MY_QUEUE, EXCHANGE_NAME, event.getName() + ".*");
+
+            StringBuilder builder = new StringBuilder(event.getName());
+            switch (scope) {
+                case ALL:
+                    builder.append(".*");
+                    break;
+                case EMERGENCY:
+                case EMERGENCY_NEARBY:
+                    builder.append(".emergency");
+                    break;
+                case NONE:
+                    continue;
+            }
+            System.out.println("senta" + builder.toString());
+            channel.queueBind(MY_QUEUE, EXCHANGE_NAME, builder.toString());
+        }
+
     }
 
 }

@@ -67,26 +67,25 @@ public class EventProfileViewModel extends BaseViewModel {
     }
 
     private void refetchFollowings() {
-        repository.getFollowedEventsIds(
-                new SingleObserver<List<Integer>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        repository.getFollowedEventsOfCurrentUser(new SingleObserver<List<Event>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(List<Integer> integers) {
-                        if (integers != null && integers.size() > 0) {
-                            UserSession.setFollowedEvents(integers);
-                        }
-                        loadEvent();
-                    }
+            @Override
+            public void onSuccess(List<Event> events) {
+                if (events != null && events.size() > 0) {
+                    UserSession.setFollowedEvents(events);
+                }
+                loadEvent();
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
-                });
+            }
+        });
     }
 
     private void loadEvent() {

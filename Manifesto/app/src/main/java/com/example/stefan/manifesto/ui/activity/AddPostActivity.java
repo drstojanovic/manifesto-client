@@ -136,9 +136,9 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
             public void onChanged(@Nullable ResponseMessage<Post> response) {
                 if (response != null && response.getMessage() != null) {
                     makeToast(response.getMessage());
+                    binding.progressBar.setVisibility(View.GONE);
+                    binding.imageLoading.setVisibility(View.GONE);
                     if (response.isSuccess()) {
-                        binding.progressBar.setVisibility(View.GONE);
-                        binding.imageLoading.setVisibility(View.GONE);
                         Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                         intent.putExtra(MainActivity.FRESH_START, true);
                         startActivity(intent);

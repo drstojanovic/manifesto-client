@@ -45,27 +45,12 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     private void getFollowedEvents() {
-        eventRepository.getFollowedEventsOfCurrentUser(new SingleObserver<List<Event>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(List<Event> events) {
-                ArrayList<NotificationsSettingsItem> list = new ArrayList<>();
-                for (Event event : events) {
-                    int val = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), 0);
-                    list.add(new NotificationsSettingsItem(event.getId(), event.getName(), NotificationsSettingsItem.Scope.values()[val]));
-                }
-                settingsItems.setValue(list);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
+        ArrayList<NotificationsSettingsItem> list = new ArrayList<>();
+        for (Event event : UserSession.getFollowedEvents()) {
+            int val = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), 0);
+            list.add(new NotificationsSettingsItem(event.getId(), event.getName(), NotificationsSettingsItem.Scope.values()[val]));
+        }
+        settingsItems.setValue(list);
     }
 
 
