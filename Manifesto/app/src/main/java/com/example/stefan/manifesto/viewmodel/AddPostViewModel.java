@@ -208,8 +208,8 @@ public class AddPostViewModel extends BaseViewModel {
 
         p.setEventId(postEvent.getId());
         p.setEventName(postEvent.getName());
-        p.setLongitude(getPostLocation().longitude);
         p.setLatitude(getPostLocation().latitude);
+        p.setLongitude(getPostLocation().longitude);
         p.setTime(DateTime.now().toDate());
         p.setType(isEmergencyType ? Post.EMERGENCY_TYPE : Post.REGULAR_TYPE);
         p.setUser(UserSession.getUser());

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.example.stefan.manifesto.databinding.ActivitySettingsBinding;
 import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.service.LocationTrackingService;
+import com.example.stefan.manifesto.service.NotificationService;
 import com.example.stefan.manifesto.ui.adapter.NotificationSettingsAdapter;
 import com.example.stefan.manifesto.utils.HelperUtils;
 import com.example.stefan.manifesto.utils.ResponseMessage;
@@ -168,5 +170,6 @@ public class SettingsActivity extends BaseActivity implements NotificationSettin
     @Override
     public void onCheckBoxSelected(NotificationsSettingsItem item) {
         viewModel.checkedSettingItem(item);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.ACTION_RESTART));
     }
 }

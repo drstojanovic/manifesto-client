@@ -29,4 +29,8 @@ public interface UserDao {
 
     @PUT("userLocation/update")
     Single<Void> updateUserLocation(@Body UserLocation userLocation);
+
+    @GET("userLocation/get/{id}")
+    Single<UserLocation> getUserLocation(@Path("id") int id);
+
 }

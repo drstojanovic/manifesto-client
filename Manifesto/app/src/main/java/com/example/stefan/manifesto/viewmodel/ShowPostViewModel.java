@@ -15,10 +15,8 @@ import static android.support.constraint.Constraints.TAG;
 public class ShowPostViewModel extends BaseViewModel {
 
     private PostRepository postRepository = new PostRepository();
-    private EventRepository eventRepository = new EventRepository();
 
     private ObservableField<Post> post = new ObservableField<>();   //ako je klasican post objekat, kad stignu podaci i setuje se taj objekat, nece se prikazati ti podaci
-    private ObservableField<String> eventName = new ObservableField<>();
 
     public ShowPostViewModel() {
 
@@ -38,29 +36,11 @@ public class ShowPostViewModel extends BaseViewModel {
             @Override
             public void onSuccess(Post post) {
                 ShowPostViewModel.this.post.set(post);
-                getPostEventName(post.getEventId());
             }
 
             @Override
             public void onError(Throwable e) {
 
-            }
-        });
-    }
-
-    private void getPostEventName(Integer eventId) {
-        eventRepository.getEventName(eventId, new SingleObserver<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {}
-
-            @Override
-            public void onSuccess(String s) {
-                eventName.set(s);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onError: " + e.getMessage() );
             }
         });
     }
@@ -73,11 +53,4 @@ public class ShowPostViewModel extends BaseViewModel {
         this.post = post;
     }
 
-    public ObservableField<String> getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(ObservableField<String> eventName) {
-        this.eventName = eventName;
-    }
 }

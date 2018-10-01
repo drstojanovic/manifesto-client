@@ -47,4 +47,11 @@ public class UserRepository {
                 .subscribe(observer);
     }
 
+    public void getUserLocation(SingleObserver<UserLocation> observer) {
+        ApiManager.getUserDao().getUserLocation(UserSession.getUser().getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 }

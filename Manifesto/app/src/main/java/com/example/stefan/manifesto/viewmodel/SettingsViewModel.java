@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.NotificationsSettingsItem;

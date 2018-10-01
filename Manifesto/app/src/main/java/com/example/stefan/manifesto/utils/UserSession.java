@@ -1,17 +1,10 @@
 package com.example.stefan.manifesto.utils;
 
-import com.example.stefan.manifesto.dao.ApiManager;
 import com.example.stefan.manifesto.model.Event;
 import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
-import com.example.stefan.manifesto.repository.EventRepository;
 
 import java.util.List;
-
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class UserSession {
 
