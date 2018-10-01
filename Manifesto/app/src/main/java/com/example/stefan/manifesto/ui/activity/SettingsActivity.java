@@ -1,10 +1,8 @@
 package com.example.stefan.manifesto.ui.activity;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -12,26 +10,31 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivitySettingsBinding;
+import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.service.LocationTrackingService;
+import com.example.stefan.manifesto.ui.adapter.NotificationSettingsAdapter;
 import com.example.stefan.manifesto.utils.HelperUtils;
 import com.example.stefan.manifesto.utils.ResponseMessage;
-import com.example.stefan.manifesto.viewmodel.AddPostViewModel;
 import com.example.stefan.manifesto.viewmodel.SettingsViewModel;
 
-public class SettingsActivity extends BaseActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SettingsActivity extends BaseActivity implements NotificationSettingsAdapter.OnSettingSelectedListener {
 
     private static final int RC_SELECT_PROFILE_IMAGE = 1;
     private static final int PERMISSION_ACCESS_FINE_LOCATION = 1;
     private ActivitySettingsBinding binding;
     private SettingsViewModel viewModel;
+    private NotificationSettingsAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class SettingsActivity extends BaseActivity {
         if (HelperUtils.isMyServiceRunning(LocationTrackingService.class)) {
             binding.switchTracking.setChecked(true);
         }
+
+        binding.recyclerNotificationSettings.setHasFixedSize(true);
+        binding.recyclerNotificationSettings.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerNotificationSettings.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -107,6 +114,13 @@ public class SettingsActivity extends BaseActivity {
                 }
             }
         });
+
+        viewModel.getSettingsItems().observe(this, new Observer<ArrayList<NotificationsSettingsItem>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<NotificationsSettingsItem> notificationsSettingsItems) {
+                setAdapter(notificationsSettingsItems);
+            }
+        });
     }
 
     @Override
@@ -140,5 +154,19 @@ public class SettingsActivity extends BaseActivity {
 
     private void startLocationTrackingService() {
         startService(new Intent(this, LocationTrackingService.class));
+    }
+
+    public void setAdapter(List<NotificationsSettingsItem> items) {
+        if (adapter == null) {
+            adapter = new NotificationSettingsAdapter(items, this);
+            binding.recyclerNotificationSettings.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onCheckBoxSelected(NotificationsSettingsItem item) {
+        viewModel.checkedSettingItem(item);
     }
 }

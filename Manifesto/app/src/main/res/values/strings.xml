@@ -49,4 +49,8 @@
     <string name="notifications">Notifications</string>
     <string name="gps_tracking">GPS tracking</string>
     <string name="settings">Settings</string>
+    <string name="all">All</string>
+    <string name="emergency_only">Emergency only</string>
+    <string name="emergency_nearby_only">Emergency nearby only</string>
+    <string name="none">None</string>
 </resources>

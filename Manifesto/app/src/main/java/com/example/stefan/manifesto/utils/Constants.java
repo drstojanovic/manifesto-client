@@ -12,4 +12,7 @@ public class Constants {
 
     public static final String POST_NOTIFICATIONS_CHANNEL = "POST_NOTIFICATIONS_CHANNEL";
     public static final int POST_NOTIFICATION_ID = 1;
+
+    //shared preferences
+    public static final String NOTIF_SETTINGS_ = "NOTIF_SETTINGS_";
 }

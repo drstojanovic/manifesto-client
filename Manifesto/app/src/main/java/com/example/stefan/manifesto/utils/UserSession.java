@@ -1,6 +1,7 @@
 package com.example.stefan.manifesto.utils;
 
 import com.example.stefan.manifesto.dao.ApiManager;
+import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.EventRepository;
 
@@ -20,12 +21,21 @@ public class UserSession {
         return user;
     }
 
-    public static void setUser (User newUser) {
+    public static void setUser(User newUser) {
         user = newUser;
     }
 
     public static void setFollowedEvents(List<Integer> followedEvents) {
         UserSession.followedEvents = followedEvents;
+        writeToSharedPrefsForFirstTime(followedEvents);
+    }
+
+    private static void writeToSharedPrefsForFirstTime(List<Integer> followedEvents) {
+        for (Integer followedEvent : followedEvents) {
+            if (SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + followedEvent, -1) == -1) {
+                SharedPrefsUtils.getInstance().setValue(Constants.NOTIF_SETTINGS_ + followedEvent, NotificationsSettingsItem.Scope.ALL.ordinal());
+            }
+        }
     }
 
     public static List<Integer> getFollowedEvents() {

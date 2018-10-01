@@ -5,18 +5,23 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
-import android.support.v7.widget.SwitchCompat;
 
+import com.example.stefan.manifesto.model.Event;
+import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.User;
+import com.example.stefan.manifesto.repository.EventRepository;
 import com.example.stefan.manifesto.repository.UserRepository;
 import com.example.stefan.manifesto.utils.Constants;
 import com.example.stefan.manifesto.utils.FirebaseOperations;
 import com.example.stefan.manifesto.utils.ResponseMessage;
+import com.example.stefan.manifesto.utils.SharedPrefsUtils;
 import com.example.stefan.manifesto.utils.SingleLiveEvent;
 import com.example.stefan.manifesto.utils.UserSession;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -24,24 +29,56 @@ import io.reactivex.disposables.Disposable;
 public class SettingsViewModel extends BaseViewModel {
 
     private UserRepository repository = new UserRepository();
+    private EventRepository eventRepository = new EventRepository();
     private ObservableField<User> user = new ObservableField<>();
     private ObservableField<String> newImage = new ObservableField<>();
     private boolean imageChanged;
     private SingleLiveEvent<Boolean> imageClick = new SingleLiveEvent<>();
     private SingleLiveEvent<ResponseMessage<User>> savingResponse = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> switchTrackingService = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<NotificationsSettingsItem>> settingsItems = new MutableLiveData<>();
 
     public SettingsViewModel() {
         user.set(UserSession.getUser());
         newImage.set(UserSession.getUser().getImage());
+        getFollowedEvents();
     }
 
+    private void getFollowedEvents() {
+        eventRepository.getFollowedEventsOfCurrentUser(new SingleObserver<List<Event>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Event> events) {
+                ArrayList<NotificationsSettingsItem> list = new ArrayList<>();
+                for (Event event : events) {
+                    int val = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), 0);
+                    list.add(new NotificationsSettingsItem(event.getId(), event.getName(), NotificationsSettingsItem.Scope.values()[val]));
+                }
+                settingsItems.setValue(list);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+
+    public void checkedSettingItem(NotificationsSettingsItem item) {
+        SharedPrefsUtils.getInstance().setValue(Constants.NOTIF_SETTINGS_ + item.getEventId(), item.getScope().ordinal());
+    }
 
     //region SavingUserSettings
 
     public void onImageClick() {
         imageClick.setValue(true);
     }
+
     public void saveChanges() {
         if (!imageChanged) {
             saveSettingsNoImage();
@@ -151,6 +188,14 @@ public class SettingsViewModel extends BaseViewModel {
 
     public void setSwitchTrackingService(MutableLiveData<Boolean> switchTrackingService) {
         this.switchTrackingService = switchTrackingService;
+    }
+
+    public LiveData<ArrayList<NotificationsSettingsItem>> getSettingsItems() {
+        return settingsItems;
+    }
+
+    public void setSettingsItems(MutableLiveData<ArrayList<NotificationsSettingsItem>> settingsItems) {
+        this.settingsItems = settingsItems;
     }
 
     //endregion

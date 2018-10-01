@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.stefan.manifesto.viewmodel.NotificationSettingsItemViewModel" />
+
+        <import type="com.example.stefan.manifesto.model.NotificationsSettingsItem.Scope"/>
+
+    </data>
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/card_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginStart="3dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/item_padding">
+
+            <TextView
+                android:id="@+id/text_event_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.settingsItem.eventName}"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Nishville" />
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_event_name"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radio_btn_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="@{viewModel.settingsItem.scope == Scope.ALL}"
+                    android:text="@string/all"/>
+
+                <RadioButton
+                    android:id="@+id/radio_btn_emergency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="@{viewModel.settingsItem.scope == Scope.EMERGENCY}"
+                    android:text="@string/emergency_only"/>
+
+                <RadioButton
+                    android:id="@+id/radio_btn_emergency_nerby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{viewModel.settingsItem.scope == Scope.EMERGENCY_NEARBY}"
+                    android:text="@string/emergency_nearby_only"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/radio_btn_none"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/none"
+                    android:checked="@{viewModel.settingsItem.scope == Scope.NONE}"
+                    android:layout_weight="1" />
+
+
+            </RadioGroup>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>
