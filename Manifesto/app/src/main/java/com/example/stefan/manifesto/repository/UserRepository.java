@@ -6,6 +6,8 @@ import com.example.stefan.manifesto.model.UserLocation;
 import com.example.stefan.manifesto.utils.ResponseMessage;
 import com.example.stefan.manifesto.utils.UserSession;
 
+import java.util.List;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -49,6 +51,13 @@ public class UserRepository {
 
     public void getUserLocation(SingleObserver<UserLocation> observer) {
         ApiManager.getUserDao().getUserLocation(UserSession.getUser().getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getAllUsers(SingleObserver<List<User>> observer) {
+        ApiManager.getUserDao().getAllUsers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

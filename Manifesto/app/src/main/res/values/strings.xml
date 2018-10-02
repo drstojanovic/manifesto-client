@@ -53,4 +53,6 @@
     <string name="emergency_only">Emergency only</string>
     <string name="emergency_nearby_only">Emergency nearby only</string>
     <string name="none">None</string>
+    <string name="person_image">Person image</string>
+    <string name="people">People</string>
 </resources>

@@ -27,6 +27,9 @@ public interface UserDao {
     @PUT("user/update")
     Single<ResponseMessage<User>> updateUser(@Body User user);
 
+    @GET("user/all")
+    Single<List<User>> getAllUsers();
+
     @PUT("userLocation/update")
     Single<Void> updateUserLocation(@Body UserLocation userLocation);
 

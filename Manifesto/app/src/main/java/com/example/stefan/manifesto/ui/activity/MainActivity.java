@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +21,8 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.service.NotificationService;
 import com.example.stefan.manifesto.ui.fragment.EventListFragment;
 import com.example.stefan.manifesto.ui.fragment.FeedFragment;
-import com.example.stefan.manifesto.utils.HelperUtils;
+import com.example.stefan.manifesto.ui.fragment.PeopleFragment;
 import com.example.stefan.manifesto.utils.UserSession;
-import com.example.stefan.manifesto.viewmodel.UserProfileViewModel;
-
-import java.io.NotSerializableException;
-import java.util.Set;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,7 +38,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
 
         if (savedInstanceState == null) {
-            putFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
+            replaceFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
         }
         startService(new Intent(this, NotificationService.class));
     }
@@ -61,7 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra(FRESH_START, false)) {
-            putFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
+            replaceFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
         }
     }
 
@@ -112,10 +107,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         switch (item.getItemId()) {
             case R.id.menu_item_events:
-                putFragment(EventListFragment.newInstance(), true, EventListFragment.class.getSimpleName());
+                replaceFragment(EventListFragment.newInstance(), true, EventListFragment.class.getSimpleName());
                 break;
             case R.id.menu_item_feed:
-                putFragment(FeedFragment.newInstance(), true, FeedFragment.class.getSimpleName());
+                replaceFragment(FeedFragment.newInstance(), true, FeedFragment.class.getSimpleName());
+                break;
+            case R.id.menu_item_people:
+                replaceFragment(PeopleFragment.newInstance(), true, PeopleFragment.class.getSimpleName());
                 break;
             case R.id.menu_item_settings:
                 navigateToActivity(SettingsActivity.class);
@@ -133,7 +131,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return false;
     }
 
-    private void putFragment(Fragment fragment, boolean addToBackStack, String tag) {
+    private void replaceFragment(Fragment fragment, boolean addToBackStack, String tag) {
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().addToBackStack(tag).replace(R.id.fragment_container, fragment).commit();
         } else {
