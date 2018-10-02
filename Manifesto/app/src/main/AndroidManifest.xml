@@ -38,6 +38,7 @@
             android:label="Post"/>
         <activity android:name=".ui.activity.UserProfileActivity" />
         <activity android:name=".ui.activity.SettingsActivity" />
+        <activity android:name=".ui.activity.MessagingActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
