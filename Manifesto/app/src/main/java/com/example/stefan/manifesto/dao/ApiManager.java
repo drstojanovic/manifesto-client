@@ -16,6 +16,7 @@ public class ApiManager {
     private static UserDao userDao;
     private static EventDao eventDao;
     private static PostDao postDao;
+    private static MessageDao messageDao;
     private static OkHttpClient client;
 
     private static Gson gson = new GsonBuilder()
@@ -58,4 +59,12 @@ public class ApiManager {
         }
         return postDao;
     }
+
+    public static MessageDao getMessageDao() {
+        if (messageDao == null) {
+            messageDao = retrofit.create(MessageDao.class);
+        }
+        return messageDao;
+    }
+
 }

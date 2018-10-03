@@ -1,6 +1,9 @@
 package com.example.stefan.manifesto.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     private int id;
     private String name;
@@ -9,6 +12,30 @@ public class User {
     private String city;
     private String image;
 
+    public User() {
+
+    }
+
+    protected User(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        email = in.readString();
+        password = in.readString();
+        city = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -47,6 +74,21 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(email);
+        parcel.writeString(password);
+        parcel.writeString(city);
+        parcel.writeString(image);
     }
 }
 

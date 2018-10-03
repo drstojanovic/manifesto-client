@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.FragmentPeopleBinding;
 import com.example.stefan.manifesto.model.User;
+import com.example.stefan.manifesto.ui.activity.MessagingActivity;
 import com.example.stefan.manifesto.ui.activity.UserProfileActivity;
 import com.example.stefan.manifesto.ui.adapter.PeopleAdapter;
 import com.example.stefan.manifesto.viewmodel.PeopleViewModel;
@@ -65,8 +66,11 @@ public class PeopleFragment extends BaseFragment implements PeopleAdapter.OnPers
 
     @Override
     public void onPersonClick(User user) {
-        Intent intent = new Intent(getContext(), UserProfileActivity.class);
-        intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.getId());
+//        Intent intent = new Intent(getContext(), UserProfileActivity.class);
+//        intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.getId());
+//        startActivity(intent);
+        Intent intent = new Intent(getContext(), MessagingActivity.class);
+        intent.putExtra(MessagingActivity.EXTRA_USER_OBJECT, user);
         startActivity(intent);
     }
 
