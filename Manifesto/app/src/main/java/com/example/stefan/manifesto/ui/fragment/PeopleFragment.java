@@ -70,7 +70,7 @@ public class PeopleFragment extends BaseFragment implements PeopleAdapter.OnPers
 //        intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.getId());
 //        startActivity(intent);
         Intent intent = new Intent(getContext(), MessagingActivity.class);
-        intent.putExtra(MessagingActivity.EXTRA_USER_OBJECT, user);
+        intent.putExtra(MessagingActivity.EXTRA_USER_ID, user.getId());
         startActivity(intent);
     }
 

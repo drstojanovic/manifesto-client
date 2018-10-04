@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import com.example.stefan.manifesto.model.Message;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.repository.MessageRepository;
+import com.example.stefan.manifesto.repository.UserRepository;
 import com.example.stefan.manifesto.utils.SingleLiveEvent;
 import com.example.stefan.manifesto.utils.UserSession;
 
@@ -21,19 +22,41 @@ import io.reactivex.disposables.Disposable;
 public class MessagingViewModel extends BaseViewModel {
 
     private MessageRepository repository = new MessageRepository();
+    private UserRepository userRepository = new UserRepository();
     private MutableLiveData<List<Message>> messages = new MutableLiveData<>();
     private ObservableField<String> messageText = new ObservableField<>();
     private SingleLiveEvent<Message> sendButtonClick = new SingleLiveEvent<>();
     private User interlocutor;
 
 
-    public MessagingViewModel(User user) {
-        this.interlocutor = user;
-        loadChat();
+    public MessagingViewModel(int interlocutorId) {
+        if (interlocutorId == -1) return;
+        getUser(interlocutorId);
+        loadChat(interlocutorId);
     }
 
-    private void loadChat() {
-        repository.getChat(interlocutor.getId(),
+    private void getUser(int interlocutorId) {
+        userRepository.getUser(interlocutorId,
+                new SingleObserver<User>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(User user) {
+                        interlocutor = user;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    private void loadChat(int interlocutorId) {
+        repository.getChat(interlocutorId,
                 new SingleObserver<List<Message>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -52,7 +75,7 @@ public class MessagingViewModel extends BaseViewModel {
                 });
     }
 
-    private void addMessage(Message message) {
+    private void addMessage(final Message message) {
         repository.addMessage(message, new SingleObserver<Void>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -61,7 +84,8 @@ public class MessagingViewModel extends BaseViewModel {
 
             @Override
             public void onSuccess(Void aVoid) {
-
+                sendButtonClick.setValue(message);
+                messageText.set("");
             }
 
             @Override
@@ -73,9 +97,7 @@ public class MessagingViewModel extends BaseViewModel {
 
     public void onSendClick() {
         Message message = new Message(0, messageText.get(), DateTime.now().toDate(), UserSession.getUser().getId(), interlocutor.getId());
-        sendButtonClick.setValue(message);
         addMessage(message);
-        messageText.set("");
     }
 
     public LiveData<List<Message>> getMessages() {

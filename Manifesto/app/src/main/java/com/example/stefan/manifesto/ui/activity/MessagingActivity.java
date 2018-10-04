@@ -2,15 +2,20 @@ package com.example.stefan.manifesto.ui.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivityMessagingBinding;
 import com.example.stefan.manifesto.model.Message;
-import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.ui.adapter.MessageAdapter;
 import com.example.stefan.manifesto.viewmodel.MessagingViewModel;
 import com.example.stefan.manifesto.viewmodel.MessagingViewModelFactory;
@@ -19,22 +24,25 @@ import java.util.List;
 
 public class MessagingActivity extends BaseActivity {
 
+    public static final String ACTION_NEW_MESSAGE = "ACTION_NEW_MESSAGE";
+    public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
+    public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
+    public static final int RC_NEW_MESSAGE_NOTIFICATION = 1;
     private MessagingViewModel viewModel;
     private ActivityMessagingBinding binding;
     private MessageAdapter adapter;
-    public static final String EXTRA_USER_OBJECT = "EXTRA_USER_OBJECT";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent() == null || getIntent().getParcelableExtra(EXTRA_USER_OBJECT) == null) {
+        if (getIntent() == null || getIntent().getIntExtra(EXTRA_USER_ID, -1) == -1) {
             finish();
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_messaging);
         viewModel = ViewModelProviders.of(this,
-                new MessagingViewModelFactory((User) getIntent().getParcelableExtra(EXTRA_USER_OBJECT))).get(MessagingViewModel.class);
+                new MessagingViewModelFactory(getIntent().getIntExtra(EXTRA_USER_ID, -1))).get(MessagingViewModel.class);
         binding.setViewModel(viewModel);
 
         initViews();
@@ -72,5 +80,37 @@ public class MessagingActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
+        LocalBroadcastManager.getInstance(this).registerReceiver(newMessageReceiver, new IntentFilter(ACTION_NEW_MESSAGE));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ManifestoApplication.messagingActivityResumed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ManifestoApplication.messagingActivityPaused();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(newMessageReceiver);
+    }
+
+    private BroadcastReceiver newMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
+            adapter.addMessage(message);
+            binding.recyclerMessages.scrollToPosition(adapter.getItemCount()-1);
+        }
+    };
 }

@@ -8,6 +8,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 public class ManifestoApplication extends Application{
 
     private static ManifestoApplication application;
+    private static boolean messagingActivityActive;
 
     @Override
     public void onCreate() {
@@ -18,5 +19,17 @@ public class ManifestoApplication extends Application{
 
     public static Context getContext() {
         return application.getApplicationContext();
+    }
+
+    public static boolean isIsMessagingActivityActive() {
+        return messagingActivityActive;
+    }
+
+    public static void messagingActivityResumed() {
+        messagingActivityActive = true;
+    }
+
+    public static void messagingActivityPaused() {
+        messagingActivityActive = false;
     }
 }

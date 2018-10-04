@@ -7,15 +7,15 @@ import android.support.annotation.NonNull;
 import com.example.stefan.manifesto.model.User;
 
 public class MessagingViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private User receiver;
+    private int receiverId;
 
-    public MessagingViewModelFactory(User receiver) {
-        this.receiver = receiver;
+    public MessagingViewModelFactory(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MessagingViewModel (receiver);
+        return (T) new MessagingViewModel (receiverId);
     }
 }

@@ -18,11 +18,13 @@ import android.util.Log;
 import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.model.Event;
+import com.example.stefan.manifesto.model.Message;
 import com.example.stefan.manifesto.model.NotificationsSettingsItem;
 import com.example.stefan.manifesto.model.PostNotificationMessage;
 import com.example.stefan.manifesto.model.UserLocation;
 import com.example.stefan.manifesto.repository.UserRepository;
 import com.example.stefan.manifesto.ui.activity.MainActivity;
+import com.example.stefan.manifesto.ui.activity.MessagingActivity;
 import com.example.stefan.manifesto.utils.Constants;
 import com.example.stefan.manifesto.utils.SharedPrefsUtils;
 import com.example.stefan.manifesto.utils.UserSession;
@@ -34,8 +36,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.ShutdownListener;
-import com.rabbitmq.client.ShutdownSignalException;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -47,9 +47,12 @@ import static android.support.constraint.Constraints.TAG;
 
 public class NotificationService extends Service {
 
-    private static final String MY_QUEUE = "user_queue_" + UserSession.getUser().getId();
-    private static final String EXCHANGE_NAME = "post_notifications";
-    private static final String EXCHANGE_TYPE = "topic";
+    private static final String MY_QUEUE_NOTIFICATIONS = "notifications_queue_user_" + UserSession.getUser().getId();
+    private static final String MY_QUEUE_MESSAGES = "messages_queue_user_" + UserSession.getUser().getId();
+    private static final String EXCHANGE_NAME_POST_NOTIFICATIONS = "post_notifications";
+    private static final String EXCHANGE_NAME_MESSAGING = "messaging";
+    private static final String EXCHANGE_TYPE_TOPIC = "topic";
+    private static final String EXCHANGE_TYPE_DIRECT = "direct";
     public static final String ACTION_RESTART = "ACTION_RESTART";
     private static final float EMERGENCY_NEARBY_DISTANCE = 100;
 
@@ -57,7 +60,6 @@ public class NotificationService extends Service {
     private Thread subscriberThread;
     private Channel channel;
     private Connection connection;
-    boolean isEmergencyNearby;
 
 
     private int POST_NOTIFICATION_ID = 1;
@@ -74,8 +76,7 @@ public class NotificationService extends Service {
 
         basicSetup();
         startSubscriber();
-        LocalBroadcastManager.getInstance(this).registerReceiver(switchBroadcast,
-                new IntentFilter(ACTION_RESTART));
+        LocalBroadcastManager.getInstance(this).registerReceiver(switchBroadcast, new IntentFilter(ACTION_RESTART));
     }
 
     @Override
@@ -100,36 +101,8 @@ public class NotificationService extends Service {
             @Override
             public void run() {
                 try {
-                    connection = connectionFactory.newConnection();
-                    channel = connection.createChannel();
-                    channel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE);
-                    channel.queueDeclare(MY_QUEUE, true, false, false, null);
-//                    channel.queueBind(MY_QUEUE, EXCHANGE_NAME, "#");
-                    generateBindingKeysAndBindQueues();
-
-                    channel.addShutdownListener(new ShutdownListener() {
-                        @Override
-                        public void shutdownCompleted(ShutdownSignalException cause) {
-                            Log.e(TAG, "shutdownCompleted: " + cause);
-                        }
-                    });
-
-                    Consumer consumer = new DefaultConsumer(channel) {
-                        @Override
-                        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                            String message = new String(body, "UTF-8");
-                            Gson gson = new Gson();
-                            PostNotificationMessage notificationMessage = gson.fromJson(message, PostNotificationMessage.class);
-                            if (notificationMessage != null && notificationMessage.getUserId() != null
-                                    && notificationMessage.getUserId() != UserSession.getUser().getId()) {
-
-                                if(!testAndShowEmergencyNearbyNotification(notificationMessage)) {
-                                    displayNotification(notificationMessage);
-                                };
-                            }
-                        }
-                    };
-                    channel.basicConsume(MY_QUEUE, true, consumer);
+                    initNotificationConsumer();
+                    initMessagingConsumer();
 
                 } catch (IOException | TimeoutException e) {
                     e.printStackTrace();
@@ -137,6 +110,58 @@ public class NotificationService extends Service {
             }
         });
         subscriberThread.start();
+    }
+
+    private void initNotificationConsumer() throws IOException, TimeoutException {
+        connection = connectionFactory.newConnection();
+        channel = connection.createChannel();
+        channel.exchangeDeclare(EXCHANGE_NAME_POST_NOTIFICATIONS, EXCHANGE_TYPE_TOPIC);
+        channel.queueDeclare(MY_QUEUE_NOTIFICATIONS, true, false, false, null);
+        generateBindingKeysAndBindQueues();
+
+        Consumer consumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String message = new String(body, "UTF-8");
+                Gson gson = new Gson();
+                PostNotificationMessage notificationMessage = gson.fromJson(message, PostNotificationMessage.class);
+                if (notificationMessage != null && notificationMessage.getUserId() != null
+                        && notificationMessage.getUserId() != UserSession.getUser().getId()) {
+
+                    if (!testAndShowEmergencyNearbyNotification(notificationMessage)) {
+                        displayNotification(notificationMessage);
+                    }
+                }
+            }
+        };
+        channel.basicConsume(MY_QUEUE_NOTIFICATIONS, true, consumer);
+    }
+
+    private void initMessagingConsumer() throws IOException {
+        channel.exchangeDeclare(EXCHANGE_NAME_MESSAGING, EXCHANGE_TYPE_DIRECT);
+        channel.queueDeclare(MY_QUEUE_MESSAGES, true, false, false, null);
+        channel.queueBind(MY_QUEUE_MESSAGES, EXCHANGE_NAME_MESSAGING, MY_QUEUE_MESSAGES);
+        Consumer messageConsumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String msg = new String(body, "UTF-8");
+                Gson gson = new Gson();
+                Message message = null;
+                try {
+                    message = gson.fromJson(msg, Message.class);
+                }catch (Exception e) {
+                    Log.e(TAG, "senta: " + e.getMessage());
+                }
+                if (ManifestoApplication.isIsMessagingActivityActive()) {   //active for which user (interlocutor)?
+                    Intent intent = new Intent(MessagingActivity.ACTION_NEW_MESSAGE);
+                    intent.putExtra(MessagingActivity.EXTRA_MESSAGE, message);
+                    LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(intent);
+                } else {
+                    displayNewMessageNotification(message);
+                }
+            }
+        };
+        channel.basicConsume(MY_QUEUE_MESSAGES, true, messageConsumer);
     }
 
     private void endSubscriber() {
@@ -152,13 +177,15 @@ public class NotificationService extends Service {
     }
 
     private void generateBindingKeysAndBindQueues() throws IOException {
+        if (channel == null || !channel.isOpen()) return;
+
         for (Event event : UserSession.getFollowedEvents()) {
             int settingsOption = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), -1);
             if (settingsOption == -1) continue;
             NotificationsSettingsItem.Scope scope = NotificationsSettingsItem.Scope.values()[settingsOption];
 
-            channel.queueUnbind(MY_QUEUE, EXCHANGE_NAME, event.getName() + ".emergency");
-            channel.queueUnbind(MY_QUEUE, EXCHANGE_NAME, event.getName() + ".*");
+            channel.queueUnbind(MY_QUEUE_NOTIFICATIONS, EXCHANGE_NAME_POST_NOTIFICATIONS, event.getName() + ".emergency");
+            channel.queueUnbind(MY_QUEUE_NOTIFICATIONS, EXCHANGE_NAME_POST_NOTIFICATIONS, event.getName() + ".*");
 
             StringBuilder builder = new StringBuilder(event.getName());
             switch (scope) {
@@ -172,7 +199,7 @@ public class NotificationService extends Service {
                 case NONE:
                     continue;
             }
-            channel.queueBind(MY_QUEUE, EXCHANGE_NAME, builder.toString());
+            channel.queueBind(MY_QUEUE_NOTIFICATIONS, EXCHANGE_NAME_POST_NOTIFICATIONS, builder.toString());
         }
     }
 
@@ -249,6 +276,29 @@ public class NotificationService extends Service {
         NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
         nmc.notify(POST_NOTIFICATION_ID, builder.build());
     }
+
+    private void displayNewMessageNotification(Message message) {
+        Intent intent = new Intent(this, MessagingActivity.class);
+        intent.putExtra(MessagingActivity.EXTRA_USER_ID, message.getInterlocutorId());
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, MessagingActivity.RC_NEW_MESSAGE_NOTIFICATION,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(ManifestoApplication.getContext(), Constants.MESSAGES_NOTIFICATIONS_CHANNEL)
+                .setContentTitle("New message received.")
+                .setContentText(message.getText())
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_feed)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(new long[]{500, 400, 200, 200, 200, 200, 200, 200, 200})
+                .setColor(getResources().getColor(R.color.colorPrimaryDark))
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
+        nmc.notify(POST_NOTIFICATION_ID, builder.build());
+    }
+
 
     BroadcastReceiver switchBroadcast = new BroadcastReceiver() {
         @Override
