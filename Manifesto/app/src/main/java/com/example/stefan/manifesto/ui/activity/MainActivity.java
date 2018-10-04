@@ -1,10 +1,14 @@
 package com.example.stefan.manifesto.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,7 +33,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public static final String FRESH_START = "FRESH_START";
     public static final int RC_NEW_POST_NOTIFICATION = 1;
+    public static final String ACTION_RESET_NAV_HEADER_DATA = "ACTION_RESET_NAV_HEADER_DATA";
     private DrawerLayout drawerLayout;
+    private View headerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             replaceFragment(FeedFragment.newInstance(), false, FeedFragment.class.getSimpleName());
         }
         startService(new Intent(this, NotificationService.class));
+        LocalBroadcastManager.getInstance(this).registerReceiver(resetHeaderDataBroadcast, new IntentFilter(ACTION_RESET_NAV_HEADER_DATA));
     }
 
     @Override
@@ -50,6 +57,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //            makeToast("Stoping notification service.");
 //            stopService(new Intent(this, NotificationService.class));
 //        }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(resetHeaderDataBroadcast);
     }
 
     @Override
@@ -77,8 +85,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
-        View hearderview = navigationView.getHeaderView(0);
-        LinearLayout container = hearderview.findViewById(R.id.nav_header);
+        headerView = navigationView.getHeaderView(0);
+        LinearLayout container = headerView.findViewById(R.id.nav_header);
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,18 +99,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
+        setHeaderData();
+    }
+
+    private void setHeaderData() {
         Glide.with(this)
                 .load(UserSession.getUser().getImage())
                 .apply(RequestOptions.circleCropTransform())
-                .into(((ImageView) hearderview.findViewById(R.id.nav_header_image)));
-        ((TextView) hearderview.findViewById(R.id.nav_header_user_name)).setText(UserSession.getUser().getName());
-        ((TextView) hearderview.findViewById(R.id.nav_header_user_city)).setText(UserSession.getUser().getCity());
+                .into(((ImageView) headerView.findViewById(R.id.nav_header_image)));
+        ((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(UserSession.getUser().getName());
+        ((TextView) headerView.findViewById(R.id.nav_header_user_city)).setText(UserSession.getUser().getCity());
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        if (isNavItemChecked(item)) return false;
-
         item.setChecked(true);
 
         switch (item.getItemId()) {
@@ -123,14 +133,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private boolean isNavItemChecked(MenuItem item) {
-        if (item.isChecked()) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        }
-        return false;
-    }
-
     private void replaceFragment(Fragment fragment, boolean addToBackStack, String tag) {
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().addToBackStack(tag).replace(R.id.fragment_container, fragment).commit();
@@ -138,4 +140,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }
+
+
+
+    private BroadcastReceiver resetHeaderDataBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setHeaderData();
+        }
+    };
+
 }

@@ -98,6 +98,7 @@ public class SettingsActivity extends BaseActivity implements NotificationSettin
                 }
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageLoading.setVisibility(View.GONE);
+                LocalBroadcastManager.getInstance(SettingsActivity.this).sendBroadcast(new Intent(MainActivity.ACTION_RESET_NAV_HEADER_DATA));
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 intent.putExtra(MainActivity.FRESH_START, true);
                 startActivity(intent);
