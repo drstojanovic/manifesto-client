@@ -98,8 +98,4 @@ public class Message implements Parcelable {
         parcel.writeInt(senderId);
         parcel.writeInt(receiverId);
     }
-
-    public int getInterlocutorId() {
-        return senderId == UserSession.getUser().getId() ? senderId : receiverId;
-    }
 }

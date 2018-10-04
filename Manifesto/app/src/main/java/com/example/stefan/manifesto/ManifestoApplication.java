@@ -9,6 +9,7 @@ public class ManifestoApplication extends Application{
 
     private static ManifestoApplication application;
     private static boolean messagingActivityActive;
+    private static int activeChatInterlocutor;
 
     @Override
     public void onCreate() {
@@ -25,11 +26,17 @@ public class ManifestoApplication extends Application{
         return messagingActivityActive;
     }
 
-    public static void messagingActivityResumed() {
+    public static void messagingActivityResumed(int activeUserChat) {
         messagingActivityActive = true;
+        ManifestoApplication.activeChatInterlocutor = activeUserChat;
     }
 
     public static void messagingActivityPaused() {
         messagingActivityActive = false;
+        activeChatInterlocutor = -1;
+    }
+
+    public static int getActiveChatInterlocutor() {
+        return activeChatInterlocutor;
     }
 }

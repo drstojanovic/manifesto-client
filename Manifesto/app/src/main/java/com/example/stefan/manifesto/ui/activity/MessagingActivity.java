@@ -122,7 +122,7 @@ public class MessagingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ManifestoApplication.messagingActivityResumed();
+        ManifestoApplication.messagingActivityResumed(getIntent().getIntExtra(EXTRA_USER_ID, -1));
     }
 
     @Override

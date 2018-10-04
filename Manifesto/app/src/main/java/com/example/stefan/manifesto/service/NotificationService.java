@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
@@ -43,8 +42,6 @@ import java.util.concurrent.TimeoutException;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
-import static android.support.constraint.Constraints.TAG;
-
 public class NotificationService extends Service {
 
     private static final String MY_QUEUE_NOTIFICATIONS = "notifications_queue_user_" + UserSession.getUser().getId();
@@ -63,6 +60,7 @@ public class NotificationService extends Service {
 
 
     private int POST_NOTIFICATION_ID = 1;
+    private int MESSAGE_NOTIFICATION_ID = 2;
 
     @Nullable
     @Override
@@ -146,13 +144,9 @@ public class NotificationService extends Service {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, "UTF-8");
                 Gson gson = new Gson();
-                Message message = null;
-                try {
-                    message = gson.fromJson(msg, Message.class);
-                }catch (Exception e) {
-                    Log.e(TAG, "senta: " + e.getMessage());
-                }
-                if (ManifestoApplication.isIsMessagingActivityActive()) {   //active for which user (interlocutor)?
+                Message message = gson.fromJson(msg, Message.class);
+                if (ManifestoApplication.isIsMessagingActivityActive()
+                        && ManifestoApplication.getActiveChatInterlocutor() == message.getSenderId()) {
                     Intent intent = new Intent(MessagingActivity.ACTION_NEW_MESSAGE);
                     intent.putExtra(MessagingActivity.EXTRA_MESSAGE, message);
                     LocalBroadcastManager.getInstance(NotificationService.this).sendBroadcast(intent);
@@ -279,7 +273,7 @@ public class NotificationService extends Service {
 
     private void displayNewMessageNotification(Message message) {
         Intent intent = new Intent(this, MessagingActivity.class);
-        intent.putExtra(MessagingActivity.EXTRA_USER_ID, message.getInterlocutorId());
+        intent.putExtra(MessagingActivity.EXTRA_USER_ID, message.getSenderId());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, MessagingActivity.RC_NEW_MESSAGE_NOTIFICATION,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -296,7 +290,7 @@ public class NotificationService extends Service {
                 .setAutoCancel(true);
 
         NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
-        nmc.notify(POST_NOTIFICATION_ID, builder.build());
+        nmc.notify(MESSAGE_NOTIFICATION_ID, builder.build());
     }
 
 
