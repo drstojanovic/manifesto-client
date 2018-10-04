@@ -76,14 +76,14 @@ public class MessagingViewModel extends BaseViewModel {
     }
 
     private void addMessage(final Message message) {
-        repository.addMessage(message, new SingleObserver<Void>() {
+        repository.addMessage(message, new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(Boolean status) {
                 sendButtonClick.setValue(message);
                 messageText.set("");
             }

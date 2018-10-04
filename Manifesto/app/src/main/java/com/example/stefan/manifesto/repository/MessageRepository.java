@@ -19,7 +19,7 @@ public class MessageRepository {
                 .subscribe(observer);
     }
 
-    public void addMessage(Message message, SingleObserver<Void> observer) {
+    public void addMessage(Message message, SingleObserver<Boolean> observer) {
         ApiManager.getMessageDao().addMessage(message)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

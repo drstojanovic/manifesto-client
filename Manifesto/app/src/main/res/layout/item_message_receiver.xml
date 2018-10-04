@@ -8,7 +8,7 @@
             name="viewModel"
             type="com.example.stefan.manifesto.viewmodel.MessageItemViewModel" />
 
-        <import type="com.example.stefan.manifesto.utils.DateUtils"/>
+        <import type="com.example.stefan.manifesto.utils.DateUtils" />
 
     </data>
 
@@ -17,7 +17,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
+        android:paddingBottom="8dp"
         android:paddingStart="10dp">
 
         <TextView
@@ -26,24 +26,26 @@
             android:layout_height="wrap_content"
             android:background="@drawable/message_container_receiver"
             android:maxWidth="250dp"
+            android:onClick="@{() -> viewModel.revertVisibility()}"
             android:padding="10dp"
+            android:text="@{viewModel.message.text}"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            android:text="@{viewModel.message.text}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Hello! How are you?" />
 
         <TextView
             android:id="@+id/text_time"
+            visible="@{viewModel.timeVisibility}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="26.04.2018. 12:24"
-            android:text="@{DateUtils.getFullFormat(viewModel.message.time)}"
-            app:layout_constraintStart_toEndOf="@id/text_message"
             android:layout_marginStart="10dp"
+            android:text="@{DateUtils.getFullFormat(viewModel.message.time)}"
+            app:layout_constraintBottom_toBottomOf="@id/text_message"
+            app:layout_constraintStart_toEndOf="@id/text_message"
             app:layout_constraintTop_toTopOf="@id/text_message"
-            app:layout_constraintBottom_toBottomOf="@id/text_message"/>
+            tools:text="26.04.2018. 12:24" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.example.stefan.manifesto.ManifestoApplication;
 import com.example.stefan.manifesto.R;
@@ -49,9 +50,29 @@ public class MessagingActivity extends BaseActivity {
         setUpObservers();
     }
 
+    @Override
+    public void onBackPressed() {
+        binding.editMessage.clearFocus();
+        super.onBackPressed();
+    }
+
     private void initViews() {
         binding.recyclerMessages.setHasFixedSize(true);
         binding.recyclerMessages.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.editMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    binding.recyclerMessages.getHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
+                        }
+                    }, 200);
+                }
+            }
+        });
     }
 
     private void setUpObservers() {
@@ -59,6 +80,7 @@ public class MessagingActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 setAdapter(messages);
+                binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
             }
         });
 
@@ -83,7 +105,6 @@ public class MessagingActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
         LocalBroadcastManager.getInstance(this).registerReceiver(newMessageReceiver, new IntentFilter(ACTION_NEW_MESSAGE));
     }
 

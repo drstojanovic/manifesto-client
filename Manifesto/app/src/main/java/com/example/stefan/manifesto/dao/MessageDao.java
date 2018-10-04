@@ -13,7 +13,7 @@ import retrofit2.http.Path;
 public interface MessageDao {
 
     @POST("message/add")
-    Single<Void> addMessage(@Body Message message);
+    Single<Boolean> addMessage(@Body Message message);
 
     @GET("message/all/interlocutorOne/{oid}/interlocutorTwo/{tid}")
     Single<List<Message>> getChat(@Path("oid") int senderId, @Path("tid") int receiverId);
