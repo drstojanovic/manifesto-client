@@ -26,11 +26,12 @@ public class MessagingViewModel extends BaseViewModel {
     private MutableLiveData<List<Message>> messages = new MutableLiveData<>();
     private ObservableField<String> messageText = new ObservableField<>();
     private SingleLiveEvent<Message> sendButtonClick = new SingleLiveEvent<>();
-    private User interlocutor;
+    private ObservableField<User> interlocutor = new ObservableField<>();
 
 
     public MessagingViewModel(int interlocutorId) {
         if (interlocutorId == -1) return;
+        interlocutor.set(new User());
         getUser(interlocutorId);
         loadChat(interlocutorId);
     }
@@ -45,7 +46,7 @@ public class MessagingViewModel extends BaseViewModel {
 
                     @Override
                     public void onSuccess(User user) {
-                        interlocutor = user;
+                        interlocutor.set(user);
                     }
 
                     @Override
@@ -96,7 +97,7 @@ public class MessagingViewModel extends BaseViewModel {
     }
 
     public void onSendClick() {
-        Message message = new Message(0, messageText.get(), DateTime.now().toDate(), UserSession.getUser().getId(), interlocutor.getId());
+        Message message = new Message(0, messageText.get(), DateTime.now().toDate(), UserSession.getUser().getId(), interlocutor.get().getId());
         addMessage(message);
     }
 
@@ -114,5 +115,13 @@ public class MessagingViewModel extends BaseViewModel {
 
     public LiveData<Message> getSendButtonClick() {
         return sendButtonClick;
+    }
+
+    public ObservableField<User> getInterlocutor() {
+        return interlocutor;
+    }
+
+    public void setInterlocutor(ObservableField<User> interlocutor) {
+        this.interlocutor = interlocutor;
     }
 }

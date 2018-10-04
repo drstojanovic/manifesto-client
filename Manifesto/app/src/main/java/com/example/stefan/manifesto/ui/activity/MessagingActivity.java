@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.stefan.manifesto.ManifestoApplication;
@@ -46,14 +47,24 @@ public class MessagingActivity extends BaseActivity {
                 new MessagingViewModelFactory(getIntent().getIntExtra(EXTRA_USER_ID, -1))).get(MessagingViewModel.class);
         binding.setViewModel(viewModel);
 
+        initToolbar();
         initViews();
         setUpObservers();
     }
 
+    public void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar_with_image);
+        setSupportActionBar(toolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
+        setTitle("");
+    }
+
     @Override
-    public void onBackPressed() {
-        binding.editMessage.clearFocus();
-        super.onBackPressed();
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
     private void initViews() {
