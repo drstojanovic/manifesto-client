@@ -38,6 +38,12 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleItem
                 listener.onPersonClick(user);
             }
         });
+        holder.binding.imageButtonMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onPersonMessageClick(user);
+            }
+        });
     }
 
     @Override
@@ -60,5 +66,6 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleItem
 
     public interface OnPersonItemClickListener {
         void onPersonClick(User user);
+        void onPersonMessageClick(User user);
     }
 }

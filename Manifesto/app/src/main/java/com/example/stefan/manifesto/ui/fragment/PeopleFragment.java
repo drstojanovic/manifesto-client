@@ -66,9 +66,13 @@ public class PeopleFragment extends BaseFragment implements PeopleAdapter.OnPers
 
     @Override
     public void onPersonClick(User user) {
-//        Intent intent = new Intent(getContext(), UserProfileActivity.class);
-//        intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.getId());
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), UserProfileActivity.class);
+        intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPersonMessageClick(User user) {
         Intent intent = new Intent(getContext(), MessagingActivity.class);
         intent.putExtra(MessagingActivity.EXTRA_USER_ID, user.getId());
         startActivity(intent);

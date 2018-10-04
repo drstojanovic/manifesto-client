@@ -99,7 +99,7 @@ public class MessagingActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable Message message) {
                 adapter.addMessage(message);
-                binding.recyclerMessages.scrollToPosition(adapter.getItemCount()-1);
+                binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
             }
         });
     }
@@ -142,7 +142,7 @@ public class MessagingActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
             adapter.addMessage(message);
-            binding.recyclerMessages.scrollToPosition(adapter.getItemCount()-1);
+            binding.recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
         }
     };
 }
