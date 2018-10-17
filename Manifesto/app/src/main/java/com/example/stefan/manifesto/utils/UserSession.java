@@ -37,6 +37,7 @@ public class UserSession {
     }
 
     public static boolean isUserFollowingEvent(int eventId) {
+        if(followedEvents == null) return false;
         for (Event followedEvent : followedEvents) {
             if (followedEvent.getId().equals(eventId)) {
                 return true;

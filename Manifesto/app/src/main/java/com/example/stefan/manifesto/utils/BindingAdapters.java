@@ -1,12 +1,16 @@
 package com.example.stefan.manifesto.utils;
 
 import android.databinding.BindingAdapter;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.stefan.manifesto.ManifestoApplication;
+import com.example.stefan.manifesto.R;
 
 public class BindingAdapters {
 
@@ -49,5 +53,14 @@ public class BindingAdapters {
     public static void viewVisibility(View view, boolean visible) {
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
+
+    @BindingAdapter("isEmergency")
+    public static void cardColor(View view, boolean emergency) {
+        ((CardView) view).setCardBackgroundColor(emergency ?
+                ManifestoApplication.getContext().getResources().getColor(R.color.lightRed)
+        :                ManifestoApplication.getContext().getResources().getColor(android.R.color.white));
+    }
+
+
 
 }

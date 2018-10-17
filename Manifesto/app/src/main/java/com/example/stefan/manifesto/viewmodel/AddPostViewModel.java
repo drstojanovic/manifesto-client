@@ -53,6 +53,7 @@ public class AddPostViewModel extends BaseViewModel {
     private MutableLiveData<ResponseMessage<Post>> creationResponse = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> btnAddEscapeRoute = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> btnAddPostLocation = new SingleLiveEvent<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private Event postEvent;
     private EventRepository eventRepository = new EventRepository();
@@ -78,8 +79,12 @@ public class AddPostViewModel extends BaseViewModel {
 
             @Override
             public void onSuccess(List<Event> list) {
-                events.setValue(list);
-                postEvent = list.get(0);
+                if (list != null && list.size() > 0) {
+                    events.setValue(list);
+                    postEvent = list.get(0);
+                } else {
+                    errorMessage.setValue("Must follow events before creating post.");
+                }
             }
 
             @Override
@@ -326,5 +331,11 @@ public class AddPostViewModel extends BaseViewModel {
         return postLocation;
     }
 
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
 
+    public void setErrorMessage(MutableLiveData<String> errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }

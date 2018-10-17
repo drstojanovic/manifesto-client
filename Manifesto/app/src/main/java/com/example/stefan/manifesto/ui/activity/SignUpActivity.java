@@ -12,6 +12,7 @@ import com.example.stefan.manifesto.R;
 import com.example.stefan.manifesto.databinding.ActivitySignupBinding;
 import com.example.stefan.manifesto.model.User;
 import com.example.stefan.manifesto.utils.ResponseMessage;
+import com.example.stefan.manifesto.viewmodel.LoginViewModel;
 import com.example.stefan.manifesto.viewmodel.SignUpViewModel;
 
 public class SignUpActivity extends BaseActivity {
@@ -35,6 +36,9 @@ public class SignUpActivity extends BaseActivity {
             public void onChanged(@Nullable ResponseMessage<User> userResponseMessage) {
                 if (userResponseMessage != null) {
                     makeToast(userResponseMessage.getMessage());
+                    if (userResponseMessage.isSuccess()) {
+                        navigateToActivity(LoginActivity.class);
+                    }
                 }
             }
         });

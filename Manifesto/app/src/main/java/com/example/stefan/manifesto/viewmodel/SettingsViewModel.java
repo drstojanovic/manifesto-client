@@ -47,6 +47,7 @@ public class SettingsViewModel extends BaseViewModel {
 
     private void getFollowedEvents() {
         ArrayList<NotificationsSettingsItem> list = new ArrayList<>();
+        if (UserSession.getFollowedEvents() == null) return;
         for (Event event : UserSession.getFollowedEvents()) {
             int val = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), 0);
             list.add(new NotificationsSettingsItem(event.getId(), event.getName(), NotificationsSettingsItem.Scope.values()[val]));

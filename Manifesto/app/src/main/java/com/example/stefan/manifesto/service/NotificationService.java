@@ -173,6 +173,9 @@ public class NotificationService extends Service {
     private void generateBindingKeysAndBindQueues() throws IOException {
         if (channel == null || !channel.isOpen()) return;
 
+        if (UserSession.getFollowedEvents() == null) {
+            return;
+        }
         for (Event event : UserSession.getFollowedEvents()) {
             int settingsOption = SharedPrefsUtils.getInstance().getIntValue(Constants.NOTIF_SETTINGS_ + event.getId(), -1);
             if (settingsOption == -1) continue;
@@ -297,11 +300,16 @@ public class NotificationService extends Service {
     BroadcastReceiver switchBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                generateBindingKeysAndBindQueues();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        generateBindingKeysAndBindQueues();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     };
 

@@ -89,6 +89,7 @@ public class ShowPostActivity extends BaseActivity implements OnMapReadyCallback
         if (googleMap == null) return;
 
         LatLng postLocation = new LatLng(post.getLatitude(), post.getLongitude());
+        googleMap.setMyLocationEnabled(true);
         googleMap.addMarker(new MarkerOptions().position(postLocation));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 15));
 

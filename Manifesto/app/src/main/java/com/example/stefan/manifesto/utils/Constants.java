@@ -7,7 +7,10 @@ public class Constants {
     public static final String FIREBASE_USERS = "users";
 
     //network
-    public static final String HOST = "10.14.116.218";
+//    public static final String HOST = "10.14.116.218";
+//    public static final String HOST = "10.14.55.179";
+    public static final String HOST = "192.168.1.4";
+//    public static final String HOST = "192.168.0.107";
 
 
     public static final String POST_NOTIFICATIONS_CHANNEL = "POST_NOTIFICATIONS_CHANNEL";

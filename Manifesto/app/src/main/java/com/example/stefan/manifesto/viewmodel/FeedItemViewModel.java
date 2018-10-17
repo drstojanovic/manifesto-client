@@ -18,4 +18,8 @@ public class FeedItemViewModel extends BaseViewModel {
     public Post getPost() {
         return post;
     }
+
+    public boolean isEmergency() {
+        return post != null && post.getType() != null && post.getType().equals("emergency");
+    }
 }

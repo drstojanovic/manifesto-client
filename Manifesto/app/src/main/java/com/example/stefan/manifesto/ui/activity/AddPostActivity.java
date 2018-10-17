@@ -171,6 +171,14 @@ public class AddPostActivity extends BaseActivity implements OnMapReadyCallback 
                 binding.textImage.setVisibility(View.VISIBLE);
             }
         });
+
+        viewModel.getErrorMessage().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                makeToast(s);
+                finish();
+            }
+        });
     }
 
     private void initViews() {
